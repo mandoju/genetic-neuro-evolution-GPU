@@ -31,25 +31,32 @@ def apply_genetic_operatos(genetic_operators, genetic_operators_size, elite_size
     assigns_bias = []
 
     # TODO: Consertar esta parte para usar a classe genetic layer
-    conv_operators_results, bias_operators_results = zip(*[
-        select_operator_and_apply(genetic_operator[0], genetic_operator[1],
-                                  tf.cast(genetic_operators_size[idx], dtype=tf.int32), elite_size, mutationRate,
-                                  genetic_layers) for idx, genetic_operator in
-        enumerate(genetic_operators)])
+    # conv_operators_results, bias_operators_results = zip(*[
+    #     select_operator_and_apply(genetic_operator[0], genetic_operator[1],
+    #                               tf.cast(genetic_operators_size[idx], dtype=tf.int32), elite_size, mutationRate,
+    #                               genetic_layers) for idx, genetic_operator in
+    #     enumerate(genetic_operators)])
 
-    results_weights = []
-    result_bias = []
 
+    assigns_weights = []
+    assigns_biases = []
     for genetic_layer in genetic_layers:
         for idx in range(len(genetic_operators)):
             genetic_layer.add_operator(
                 *select_operator_and_apply(genetic_operators[idx][0], genetic_operators[idx][1],
                                            tf.cast(genetic_operators_size[idx], dtype=tf.int32), elite_size,
                                            mutationRate, genetic_layer))
-        genetic_layer.layer.weight.assign(
-            tf.concat([genetic_layer.best_weights, tf.stack(genetic_layer.operators_weights)]))
-        genetic_layer.layer.bias.assign(
-            tf.concat([genetic_layer.best_biases, tf.stack(genetic_layer.operators_biases)]))
+        #print(genetic_layer.best_weights)
+        #print(genetic_layer.operators_weights)
+        print("operator weights")
+        print(tf.concat([genetic_layer.best_weights] + genetic_layer.operators_weights,axis=0))
+
+        assigns_weights.append(tf.concat([genetic_layer.best_weights] + genetic_layer.operators_weights,axis=0))
+        assigns_biases.append(tf.concat([genetic_layer.best_biases] + genetic_layer.operators_biases,axis=0))
+        #genetic_layer.layer.weight.assign(
+        #    tf.concat([genetic_layer.best_weights] + genetic_layer.operators_weights,axis=0))
+        #genetic_layer.layer.bias.assign(
+        #    tf.concat([genetic_layer.best_biases] + genetic_layer.operators_biases,axis=0))
     # conv_operators_results = list(conv_operators_results)
     # bias_operators_results = list(bias_operators_results)
 
@@ -231,30 +238,35 @@ def crossover_operator(genetic_layer: GeneticLayer, tamanhoElite, tamanhoCrossov
         permutations = permutations % tamanhoElite
         # permutations = tf.random_shuffle(permutations)
         permutations = tf.reshape(permutations, [2, -1])
+        permutations = tf.transpose(permutations)
 
-        finish_conv = []
-        finish_bias = []
 
         i = tf.constant(0)
 
         # for i in tf.range(tamanhoCrossover):
-        def add_crossover(permutation):
-            father_tensor = tf.gather(genetic_layer.best_weights, permutation[0])
-            mother_tensor = tf.gather(genetic_layer.best_weights, permutation[1])
-            finish_conv.append(generate_child_by_all(father_tensor, mother_tensor))
-            father_tensor = tf.gather(genetic_layer.best_biases, permutation[0])
-            mother_tensor = tf.gather(genetic_layer.best_biases, permutation[1])
-            finish_bias.append(generate_child_by_all(father_tensor, mother_tensor))
+        #def add_crossover(permutation):
+        #    print(genetic_layer)
+        father_tensor = tf.gather(genetic_layer.best_weights, permutations[0])
+        mother_tensor = tf.gather(genetic_layer.best_weights, permutations[1])
+        print("pai")
+        print(father_tensor)
+        finish_conv = generate_child_by_all(father_tensor, mother_tensor)
+        father_tensor = tf.gather(genetic_layer.best_biases, permutations[0])
+        mother_tensor = tf.gather(genetic_layer.best_biases, permutations[1])
+        finish_bias = generate_child_by_all(father_tensor, mother_tensor)
 
-        tf.map_fn(lambda permutation: add_crossover(permutation), permutations)
+        # add_crossover(permutations[0])
+        #i = tf.constant(0)
+        #c = lambda i: tf.less(i,)
+        #tf.while_loop("","","")
+
+        #tf.map_fn(lambda permutation: add_crossover(permutation), permutations)
 
         return finish_conv, finish_bias
 
 
 def mutation_operator(genetic_layer: GeneticLayer, tamanhoElite, mutationRate, mutationPercent, tamanhoMutacoes):
     with tf.name_scope('Mutation_new'):
-        finish_conv = []
-        finish_bias = []
 
         shape_module = tf.shape(genetic_layer.best_weights)
 
@@ -265,7 +277,7 @@ def mutation_operator(genetic_layer: GeneticLayer, tamanhoElite, mutationRate, m
         tensors_to_mutate = tf.strided_slice(tf.tile(elite_key, saida_shape), [0], [tamanhoMutacoes],
                                                  name="stride_tensor_to_mutate")
 
-        finish_conv.append(mutation(tensors_to_mutate, mutationRate, mutationPercent))
+        finish_conv = mutation(tensors_to_mutate, mutationRate, mutationPercent)
 
         elite_key = genetic_layer.best_biases[0: tamanhoElite]
         times_to_repeat = (tamanhoMutacoes // tamanhoElite) + 1
@@ -273,7 +285,7 @@ def mutation_operator(genetic_layer: GeneticLayer, tamanhoElite, mutationRate, m
         saida_shape = tf.concat([[times_to_repeat], shape_with_ones], axis=0)
         tensors_to_mutate = tf.tile(elite_key, saida_shape)[0:tamanhoMutacoes]
 
-        finish_bias.append(mutation(tensors_to_mutate, mutationRate, mutationPercent))
+        finish_bias = mutation(tensors_to_mutate, mutationRate, mutationPercent)
         # finish_conv[key] = tf.map_fn(lambda x: mutation(best_conv[key][x%shape_module],mutationRate,mutationPercent),tf.range( tamanhoMutacoes), dtype=tf.float32)
 
     return finish_conv, finish_bias

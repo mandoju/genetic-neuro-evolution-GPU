@@ -60,11 +60,13 @@ class GeneticNeuralNetwork:
         else:
             fitness = self.neural_networks.accuracies
 
+        print("choose best")
         choose_best(
             self.geneticSettings['selection'], self.geneticLayers, fitness,
             self.eliteSize)
 
-        apply_genetic_operatos(self.geneticSettings['genetic_operators'], self.operatorSize,
+        print("apply_genetic_operators")
+        assigns = apply_genetic_operatos(self.geneticSettings['genetic_operators'], self.operatorSize,
                                                           self.eliteSize,self.geneticLayers, self.mutationRate, 2, len(self.layers))
 
         print('passei por aqui')

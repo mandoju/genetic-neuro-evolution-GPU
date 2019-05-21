@@ -87,6 +87,7 @@ def choose_best_tensor_tournament(convulations, biases, fitnesses, chooseNumber)
         biases_output_mutate = {key: None for key in biases_output_keys}
 
         for key in convulations:
+            print(convulations[key])
             convulation_weights_output[key] = tf.gather(convulations[key],
                                                         top_indices)  # tf.slice(convulation_weights_best_output[key],conv_shape_zero, conv_shape_altered )
             convulation_weights_mutate_output[key] = tf.gather(convulations[key],

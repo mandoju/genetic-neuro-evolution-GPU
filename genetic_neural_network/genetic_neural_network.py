@@ -66,7 +66,7 @@ class GeneticNeuralNetwork:
             self.eliteSize)
 
         print("apply_genetic_operators")
-        assigns = apply_genetic_operatos(self.geneticSettings['genetic_operators'], self.operatorSize,
+        assigns_weights,assigns_biases = apply_genetic_operatos(self.geneticSettings['genetic_operators'], self.operatorSize,
                                                           self.eliteSize,self.geneticLayers, self.mutationRate, 2, len(self.layers))
 
         print('passei por aqui')
@@ -98,6 +98,9 @@ class GeneticNeuralNetwork:
         tempos_validation = []
         fine_tuning_graph = []
 
+        print(assigns_weights)
+
+        print(assigns_biases)
         print("batchs: " + str(len(train_x) // 125))
         mutate = self.geneticSettings['mutationRate']
         print(mutate)
@@ -126,7 +129,7 @@ class GeneticNeuralNetwork:
 
                 predicts, label_argmax, accuracies, cost, finished_conv, finished_bias = sess.run(
                     [self.neural_networks.predicts, self.neural_networks.label_argmax, self.neural_networks.accuracies,
-                     fitness, self.geneticLayers.layers.weights, self.geneticLayers.layers.bias], feed_dict={
+                     fitness, assigns_weights, assigns_biases], feed_dict={
                         self.neural_networks.X: batch_x, self.neural_networks.Y: batch_y, self.mutationRate: mutate,
                         self.operatorSize: self.slice_sizes}, options=run_options, run_metadata=run_metadata)
 

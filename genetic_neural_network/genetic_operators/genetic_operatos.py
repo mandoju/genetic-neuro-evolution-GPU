@@ -53,6 +53,7 @@ def apply_genetic_operatos(genetic_operators, genetic_operators_size, elite_size
 
         assigns_weights.append(tf.concat([genetic_layer.best_weights] + genetic_layer.operators_weights,axis=0))
         assigns_biases.append(tf.concat([genetic_layer.best_biases] + genetic_layer.operators_biases,axis=0))
+    return assigns_weights, assigns_biases
         #genetic_layer.layer.weight.assign(
         #    tf.concat([genetic_layer.best_weights] + genetic_layer.operators_weights,axis=0))
         #genetic_layer.layer.bias.assign(

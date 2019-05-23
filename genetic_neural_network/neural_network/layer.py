@@ -18,8 +18,9 @@ class Layer:
 
     def run(self, input):
         out = []
-        for i in range(self.populationSize):
-            out.append(self.run_slice(input[i], i))
+        #for i in range(self.populationSize):
+        #    out.append(self.run_slice(input[i], i))
+        out = tf.add(tf.matmul(input, self.weight), self.bias)
         return out
 
     def run_slice(self, input, slice):

@@ -28,8 +28,9 @@ class GeneticNeuralNetwork:
         self.geneticLayers = geneticSettings['geneticLayers']
         create_population(self.populationSize, self.geneticLayers)
         self.neural_networks = Neural_network(self.geneticLayers,
-            geneticSettings['train_x'], geneticSettings['train_y'], geneticSettings['test_x'],
-            geneticSettings['test_y'], './log/')
+                                              geneticSettings['train_x'], geneticSettings['train_y'],
+                                              geneticSettings['test_x'],
+                                              geneticSettings['test_y'], './log/')
         self.geneticSettings = geneticSettings
         self.current_epoch = 0
         self.eliteSize = int(geneticSettings['elite'] * self.populationSize)
@@ -66,8 +67,10 @@ class GeneticNeuralNetwork:
             self.eliteSize)
 
         print("apply_genetic_operators")
-        assigns_weights,assigns_biases = apply_genetic_operatos(self.geneticSettings['genetic_operators'], self.operatorSize,
-                                                          self.eliteSize,self.geneticLayers, self.mutationRate, 2, len(self.layers))
+        assigns_weights, assigns_biases = apply_genetic_operatos(self.geneticSettings['genetic_operators'],
+                                                                 self.operatorSize,
+                                                                 self.eliteSize, self.geneticLayers, self.mutationRate,
+                                                                 2, len(self.layers))
 
         print('passei por aqui')
         merged = tf.summary.merge_all()
@@ -127,15 +130,17 @@ class GeneticNeuralNetwork:
 
                 session_time = time.time()
 
+                print(assigns_weights)
+                print(assigns_biases)
                 predicts, label_argmax, accuracies, cost, finished_conv, finished_bias = sess.run(
                     [self.neural_networks.predicts, self.neural_networks.label_argmax, self.neural_networks.accuracies,
                      fitness, assigns_weights, assigns_biases], feed_dict={
                         self.neural_networks.X: batch_x, self.neural_networks.Y: batch_y, self.mutationRate: mutate,
-                        self.operatorSize: self.slice_sizes}, options=run_options, run_metadata=run_metadata)
-
+                        self.operatorSize: self.slice_sizes})#, options=run_options, run_metadata=run_metadata)
                 print("sessao demorou: " + str(time.time() - session_time))
                 writer.add_run_metadata(run_metadata, 'step%s' % (str(batch) + '_' + str(i)))
                 msg = "Batch: " + str(batch)
+                # np.savetxt('weights_save.txt',finished_conv[0])
                 # np.savetxt('predicts_save.txt',predicts)
                 # np.savetxt('Y.txt',label_argmax)
                 print("Accuracy: ")
@@ -175,11 +180,8 @@ class GeneticNeuralNetwork:
                     slice_with_operator = np.column_stack(
                         (self.slice_sizes, operators_max, range(len(self.slice_sizes))))
                     slice_with_operator = list(filter(lambda x: x[0] > self.populationSize * 0.05, slice_with_operator))
-                    print(slice_with_operator)
                     min_fitness_slice = min(slice_with_operator, key=lambda x: x[1])
-                    print(min_fitness_slice)
                     min_fitness_operator_index = int(min_fitness_slice[2])
-                    print(min_fitness_operator_index)
                     if (self.slice_sizes[min_fitness_operator_index] > 1):
                         self.slice_sizes[max_fitness_operator_index] += 1
                         self.slice_sizes[min_fitness_operator_index] -= 1

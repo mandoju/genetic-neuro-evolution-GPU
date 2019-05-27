@@ -17,9 +17,9 @@ import sys
 #    sys.exit()
 
 layers = [
-    GeneticLayer((1, 40), (40), 'wd', tf.math.tanh, 'd1'),
-    GeneticLayer((40, 12), (12), 'wd', tf.math.tanh, 'd2'),
-    GeneticLayer((12, 1), (1), 'wd', None, 'out')
+    GeneticLayer((1, 40), 40, 'wd', tf.math.tanh, 'd1'),
+    GeneticLayer((40, 12), 12, 'wd', tf.math.tanh, 'd2'),
+    GeneticLayer((12, 1), 1, 'wd', None, 'out')
 ]
 
 train_x, train_y, test_x, test_y = get_sine_data()
@@ -29,7 +29,7 @@ geneticSettings = {
     'test_x': test_x,
     'test_y': test_y,
     'populationSize': int(sys.argv[1]),
-    'epochs': 10,
+    'epochs': 1000,
     'inner_loop': 10,
     # 'weights_convulation': weights_convulation_input,
     # 'biases': biases_input,

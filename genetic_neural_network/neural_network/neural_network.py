@@ -122,14 +122,22 @@ class Neural_network:
 
             with tf.name_scope('square_mean_error') as scope:
 
-                square_mean_error = tf.map_fn(lambda pred: tf.reduce_mean(tf.squared_difference(tf.cast(tf.argmax(
+                 square_mean_error = tf.map_fn(lambda pred: tf.reduce_mean(tf.squared_difference(tf.cast(tf.argmax(
                     pred, axis=1, name="label_test_argmax_sme"), tf.float32),
                     tf.cast(tf.argmax(self.Y, axis=1, name="label_test_argmax_sme"), tf.float32))), predicts)
+                # argmax_y = tf.cast(tf.argmax(self.Y, axis=1, name="label_test_argmax_sme"), dtype=tf.float32)
+                # argmax_pred = tf.cast(tf.argmax(predicts, axis=2, name="label_test_argmax_sme"), dtype=tf.float32)
+                # squared_differences = tf.squared_difference(argmax_pred, argmax_y)
+                # square_mean_error = tf.reduce_mean(squared_differences, axis=1)
             with tf.name_scope('root_square_mean_error') as scope:
 
                 root_square_mean_error = tf.map_fn(lambda pred: tf.sqrt(
-                    tf.reduce_mean(tf.square(tf.subtract(Y, pred)))), predicts, dtype=tf.float32)
-
+                   tf.reduce_mean(tf.square(tf.subtract(Y, pred)))), predicts, dtype=tf.float32)
+                # print(root_square_mean_error)
+                # squared_differences = tf.square(tf.subtract(Y, predicts))
+                # print(squared_differences)
+                # root_square_mean_error = tf.reduce_mean(squared_differences, axis=1)
+                # print(root_square_mean_error)
             # Utilizacao das acuracias e predicts como tensores
             # self.predicts = predicts
             if (self.classification):

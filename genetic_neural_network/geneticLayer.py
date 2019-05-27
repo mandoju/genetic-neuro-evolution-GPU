@@ -25,7 +25,7 @@ class GeneticLayer:
         print(tf.map_fn(lambda x: initializer(list(self.weight_size)), tf.range(population_size), dtype=tf.float32))
         bias = tf.get_variable('b' + self.name, shape=(population_size, self.bias_size),
                                initializer=tf.random_normal_initializer())
-        self.layer = Layer(population_size, weight, bias, self.type, self.activation)
+        self.layer = Layer(population_size, weight, bias, self.bias_size , self.type, self.activation)
 
     def set_best(self,weights,biases):
         self.best_weights = weights

@@ -37,6 +37,7 @@ def choose_best_tensor_conv(genetic_layers: List[GeneticLayer], fitnesses, choos
     with tf.name_scope('Choose_best') as scope:
 
         print(chooseNumber)
+        fitnesses = tf.squeeze(fitnesses)
         top_values, top_indices = tf.math.top_k(
             fitnesses, chooseNumber)
         # tf.reshape(fitnesses, (-1,)), 4)

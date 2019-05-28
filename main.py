@@ -30,7 +30,7 @@ geneticSettings = {
     'test_y': test_y,
     'populationSize': int(sys.argv[1]),
     'epochs': 1000,
-    'inner_loop': 10,
+    'inner_loop': 1000,
     # 'weights_convulation': weights_convulation_input,
     # 'biases': biases_input,
     'geneticLayers': layers,

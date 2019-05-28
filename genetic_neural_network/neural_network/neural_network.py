@@ -61,6 +61,23 @@ class Neural_network:
             accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
             return accuracy
 
+    # def get_accuracies(self, predict):
+    #
+    #     if (self.classification):
+    #         correct_prediction = tf.equal(
+    #             tf.argmax(predict, 2), tf.argmax(self.Y, 1))
+    #
+    #         # calculate accuracy across all the given images and average them out.
+    #         accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32),axis=1)
+    #         return accuracy
+    #     else:
+    #         correct_prediction = tf.equal(
+    #             predict, self.Y)
+    #
+    #         # calculate accuracy across all the given images and average them out.
+    #         accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32),axis=1)
+    #         return
+
     def get_square_mean_error(self, predict):
 
         with tf.name_scope('calculo_square_mean_error') as scope:
@@ -74,9 +91,8 @@ class Neural_network:
         # return cost
 
     def get_cost_functions(self, predict, train, test):
-        with tf.name_scope('calculo_da_acuracia') as scope:
+        with tf.name_scope('get_cost_functions') as scope:
             return tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits_v2(labels=train, logits=predict))
-
             # return test_cost
 
     def run(self):
@@ -107,7 +123,7 @@ class Neural_network:
 
                 train_accuracies = tf.map_fn(
                     lambda x: self.get_accuracies(x), predicts)
-
+                #train_accuracies = self.get_accuracies(predicts)
                 # train_accuracies = self.get_accuracies(predicts[0])
             with tf.name_scope('cost') as cost:
 
@@ -131,13 +147,14 @@ class Neural_network:
                 # square_mean_error = tf.reduce_mean(squared_differences, axis=1)
             with tf.name_scope('root_square_mean_error') as scope:
 
-                root_square_mean_error = tf.map_fn(lambda pred: tf.sqrt(
-                   tf.reduce_mean(tf.square(tf.subtract(Y, pred)))), predicts, dtype=tf.float32)
+                # root_square_mean_error = tf.map_fn(lambda pred: tf.sqrt(
+                #     tf.reduce_mean(tf.square(tf.subtract(Y, pred)))), predicts, dtype=tf.float32)
                 # print(root_square_mean_error)
-                # squared_differences = tf.square(tf.subtract(Y, predicts))
-                # print(squared_differences)
-                # root_square_mean_error = tf.reduce_mean(squared_differences, axis=1)
-                # print(root_square_mean_error)
+                squared_differences = tf.square(tf.subtract(Y, predicts))
+
+                root_square_mean_error = tf.reduce_mean(squared_differences, axis=1)
+
+                #print(root_square_mean_error)
             # Utilizacao das acuracias e predicts como tensores
             # self.predicts = predicts
             if (self.classification):

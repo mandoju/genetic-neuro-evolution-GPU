@@ -130,10 +130,9 @@ class GeneticNeuralNetwork:
 
                 session_time = time.time()
 
-                print(assigns_weights)
-                print(assigns_biases)
-                predicts, label_argmax, accuracies, cost, finished_conv, finished_bias = sess.run(
-                    [self.neural_networks.predicts, self.neural_networks.label_argmax, self.neural_networks.accuracies,
+
+                predicts, label_argmax, cost, finished_conv, finished_bias = sess.run(
+                    [self.neural_networks.predicts, self.neural_networks.label_argmax,
                      fitness, assigns_weights, assigns_biases], feed_dict={
                         self.neural_networks.X: batch_x, self.neural_networks.Y: batch_y, self.mutationRate: mutate,
                         self.operatorSize: self.slice_sizes})#, options=run_options, run_metadata=run_metadata)
@@ -143,14 +142,14 @@ class GeneticNeuralNetwork:
                 # np.savetxt('weights_save.txt',finished_conv[0])
                 # np.savetxt('predicts_save.txt',predicts)
                 # np.savetxt('Y.txt',label_argmax)
-                print("Accuracy: ")
-                print(accuracies)
+                # print("Accuracy: ")
+                # print(accuracies)
                 print("Cost: ")
-                print(cost)
+                print(cost[0:])
                 print("tempo atual: " + str(time.time() - start_time))
                 # if(max(cost) < 3):
                 fitnesses.append(max(cost))
-                acuracias.append(max(accuracies))
+                # acuracias.append(max(accuracies))
                 tempos.append(time.time() - start_time)
                 if (self.fineTuningBoolean):
                     # if(max(accuracies) <= last_accuracy):

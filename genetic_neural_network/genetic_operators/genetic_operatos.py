@@ -56,37 +56,7 @@ def apply_genetic_operatos(genetic_operators, genetic_operators_size, elite_size
                                         tf.concat([genetic_layer.best_biases] + genetic_layer.operators_biases,
                                                   axis=0)))
     return assigns_weights, assigns_biases
-    # genetic_layer.layer.weight.assign(
-    #    tf.concat([genetic_layer.best_weights] + genetic_layer.operators_weights,axis=0))
-    # genetic_layer.layer.bias.assign(
-    #    tf.concat([genetic_layer.best_biases] + genetic_layer.operators_biases,axis=0))
-    # conv_operators_results = list(conv_operators_results)
-    # bias_operators_results = list(bias_operators_results)
 
-    # conv_operators_results.append(best_convulations)
-    # bias_operators_results.append(best_biases)
-    # for item in conv_operators_results:
-    #     for k, v in item.items():
-    #         if (k in conv_result_dict):
-    #             conv_result_dict[k].append(v)
-    #         else:
-    #             conv_result_dict[k] = [v]
-    #
-    # for item in bias_operators_results:
-    #     for k, v in item.items():
-    #         if (k in bias_result_dict):
-    #             bias_result_dict[k].append(v)
-    #         else:
-    #             bias_result_dict[k] = [v]
-    #
-    # for key, value in conv_result_dict.items():
-    #     print(input_convulations[key])
-    #     assigns_conv.append(input_convulations[key].assign(tf.concat(value, 0)))
-    #
-    # for key, value in bias_result_dict.items():
-    #      .append(input_bias[key].assign(tf.concat(value, 0)))
-    #
-    # return assigns_conv, assigns_bias
 
 
 ##Todos aleatorios
@@ -106,34 +76,7 @@ def generate_child_by_all(mother_tensor, father_tensor):
         random_array_inverse = tf.scalar_mul(-1, random_array_binary) + tf.ones_like(random_array_binary)
 
         crossoved = tf.multiply(father_tensor, random_array_binary) + tf.multiply(mother_tensor, random_array_inverse)
-        # temp_neural_network.append(mutation(crossoved,mutationRate))
-        # Criação o array de taxa de mistura para ambos
-        # random_array_start = tf.cast(
-        #    tf.random_uniform(dtype=tf.int32, minval=0, maxval=1, shape=[shape_size[0]]), tf.float32)
 
-        # for weight_idx_range in range(layers - 1):
-        #     weight_idx = weight_idx_range - 1
-        #     father_tensor_process = mother_tensor[weight_idx]
-        #     mother_tensor_process = father_tensor[weight_idx]
-
-        #     shape_size = tf.shape(mother_tensor[weight_idx])
-
-        #     # #Criação do array binário para definir quais são os genes que irão receber a mistura do  mãe
-        #     # random_array_binary = tf.random_uniform(dtype=tf.float32, minval=0, maxval=1, shape=[shape_size[0]])
-
-        #     # #Criando o array inverso para definir o número ao contrário para criar a quantidade recebida pelo pai
-        #     # random_array_inverse = tf.map_fn(lambda x: (1 - x), random_array_binary, dtype=tf.float32)
-
-        #     # #Criação o array de taxa de mistura para ambos
-        #     # random_array_start = tf.cast(
-        #     #     tf.random_uniform(dtype=tf.int32, minval=0, maxval=1, shape=[shape_size[0]]), tf.float32)
-
-        #     #Fazendo o crossover do pai + mãe
-        #     #child_weight_tensor = tf.Variable(tf.multiply(father_tensor_process, random_array_start[:, tf.newaxis]) + tf.multiply( mother_tensor_process, random_array_inverse[:, tf.newaxis]))
-
-        #     #mutation(child_weight_tensor,mutationRate)
-        #     crossoved = tf.multiply(father_tensor_process, random_array_binary[weight_idx]) + tf.multiply( mother_tensor_process, random_array_inverse[weight_idx])
-        #     temp_neural_network.append(mutation(crossoved,mutationRate))
 
         return crossoved
 
@@ -156,34 +99,7 @@ def generate_child_by_mixed(mother_tensor, father_tensor, mutationRate):
         random_array_inverse = tf.scalar_mul(-1, random_array_binary) + tf.ones_like(random_array_binary)
 
         crossoved = tf.multiply(father_tensor, random_array_binary) + tf.multiply(mother_tensor, random_array_inverse)
-        # temp_neural_network.append(mutation(crossoved,mutationRate))
-        # Criação o array de taxa de mistura para ambos
-        # random_array_start = tf.cast(
-        #    tf.random_uniform(dtype=tf.int32, minval=0, maxval=1, shape=[shape_size[0]]), tf.float32)
 
-        # for weight_idx_range in range(layers - 1):
-        #     weight_idx = weight_idx_range - 1
-        #     father_tensor_process = mother_tensor[weight_idx]
-        #     mother_tensor_process = father_tensor[weight_idx]
-
-        #     shape_size = tf.shape(mother_tensor[weight_idx])
-
-        #     # #Criação do array binário para definir quais são os genes que irão receber a mistura do  mãe
-        #     # random_array_binary = tf.random_uniform(dtype=tf.float32, minval=0, maxval=1, shape=[shape_size[0]])
-
-        #     # #Criando o array inverso para definir o número ao contrário para criar a quantidade recebida pelo pai
-        #     # random_array_inverse = tf.map_fn(lambda x: (1 - x), random_array_binary, dtype=tf.float32)
-
-        #     # #Criação o array de taxa de mistura para ambos
-        #     # random_array_start = tf.cast(
-        #     #     tf.random_uniform(dtype=tf.int32, minval=0, maxval=1, shape=[shape_size[0]]), tf.float32)
-
-        #     #Fazendo o crossover do pai + mãe
-        #     #child_weight_tensor = tf.Variable(tf.multiply(father_tensor_process, random_array_start[:, tf.newaxis]) + tf.multiply( mother_tensor_process, random_array_inverse[:, tf.newaxis]))
-
-        #     #mutation(child_weight_tensor,mutationRate)
-        #     crossoved = tf.multiply(father_tensor_process, random_array_binary[weight_idx]) + tf.multiply( mother_tensor_process, random_array_inverse[weight_idx])
-        #     temp_neural_network.append(mutation(crossoved,mutationRate))
 
         return crossoved
 
@@ -214,20 +130,7 @@ def generate_child_by_layer(mother_tensor, father_tensor, mutationRate, layers):
 
             shape_size = tf.shape(mother_tensor[weight_idx])
 
-            # #Criação do array binário para definir quais são os genes que irão receber a mistura do  mãe
-            # random_array_binary = tf.random_uniform(dtype=tf.float32, minval=0, maxval=1, shape=[shape_size[0]])
 
-            # #Criando o array inverso para definir o número ao contrário para criar a quantidade recebida pelo pai
-            # random_array_inverse = tf.map_fn(lambda x: (1 - x), random_array_binary, dtype=tf.float32)
-
-            # #Criação o array de taxa de mistura para ambos
-            # random_array_start = tf.cast(
-            #     tf.random_uniform(dtype=tf.int32, minval=0, maxval=1, shape=[shape_size[0]]), tf.float32)
-
-            # Fazendo o crossover do pai + mãe
-            # child_weight_tensor = tf.Variable(tf.multiply(father_tensor_process, random_array_start[:, tf.newaxis]) + tf.multiply( mother_tensor_process, random_array_inverse[:, tf.newaxis]))
-
-            # mutation(child_weight_tensor,mutationRate)
             crossoved = tf.multiply(father_tensor_process, random_array_binary[weight_idx]) + tf.multiply(
                 mother_tensor_process, random_array_inverse[weight_idx])
             temp_neural_network.append(mutation(crossoved, mutationRate))
@@ -256,12 +159,6 @@ def crossover_operator(genetic_layer: GeneticLayer, tamanhoElite, tamanhoCrossov
         mother_tensor = tf.gather(genetic_layer.best_biases, permutations[1])
         finish_bias = generate_child_by_all(father_tensor, mother_tensor)
 
-        # add_crossover(permutations[0])
-        # i = tf.constant(0)
-        # c = lambda i: tf.less(i,)
-        # tf.while_loop("","","")
-
-        # tf.map_fn(lambda permutation: add_crossover(permutation), permutations)
 
         return finish_conv, finish_bias
 
@@ -286,7 +183,6 @@ def mutation_operator(genetic_layer: GeneticLayer, tamanhoElite, mutationRate, m
         tensors_to_mutate = tf.tile(elite_key, saida_shape)[0:tamanhoMutacoes]
 
         finish_bias = mutation(tensors_to_mutate, mutationRate, mutationPercent)
-        # finish_conv[key] = tf.map_fn(lambda x: mutation(best_conv[key][x%shape_module],mutationRate,mutationPercent),tf.range( tamanhoMutacoes), dtype=tf.float32)
 
     return finish_conv, finish_bias
 

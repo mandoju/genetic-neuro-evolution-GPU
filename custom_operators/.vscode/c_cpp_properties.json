@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/lib",
+                "C:\\ProgramData\\chocolatey\\lib\\mingw\\tools\\install\\mingw64\\lib\\gcc\\x86_64-w64-mingw32\\8.1.0\\include\\c++",
+                "C:\\projetos\\cpp_libs","C:\\Users\\jorge\\Anaconda3\\envs\\tensorflow\\lib\\site-packages\\tensorflow\\include",
+                "C:\\Users\\jorge\\Anaconda3\\envs\\tensorflow\\Lib\\site-packages\\tensorflow\\include\\external\\eigen_archive",
+                "C:\\Users\\jorge\\Anaconda3\\envs\\tensorflow\\Lib\\site-packages\\tensorflow\\include\\google\\protobuf_archive\\src"
+
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "windowsSdkVersion": "8.1",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "msvc-x64"
+        }
+    ],
+    "version": 4
+}

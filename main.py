@@ -42,7 +42,7 @@ geneticSettings = {
     'genetic_operators_size': [0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10],
     'fineTuningRate': 0.05,
     'layers': [785, 10],
-    'mutationRate': 0.001,
+    'mutationRate': 0.01,
     'logdir': './log/',
     'fineTuning': True
 }

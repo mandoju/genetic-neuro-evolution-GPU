@@ -22,7 +22,7 @@ __global__ void MutationCudaKernel(const int size, const T* in, T* out) {
         out[i] *= distribution_biased(generator_biased);
     }
   }
-}
+};
 
 // Define the GPU implementation that launches the CUDA kernel.
 template <typename T>
@@ -36,7 +36,7 @@ void MutationFunctor<GPUDevice, T>::operator()(
   int thread_per_block = 20;
   MutationCudaKernel<T>
       <<<block_count, thread_per_block, 0, d.stream()>>>(size, in, out);
-}
+};
 
 // Explicitly instantiate functors for the types of OpKernels registered.
 template struct MutationFunctor<GPUDevice, float>;

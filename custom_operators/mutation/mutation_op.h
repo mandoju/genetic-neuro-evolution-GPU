@@ -10,7 +10,7 @@ struct MutationFunctor {
 #if GOOGLE_CUDA
 // Partially specialize functor for GpuDevice.
 template <typename Eigen::GpuDevice, typename T>
-struct ExampleFunctor {
+struct MutationFunctor {
   void operator()(const Eigen::GpuDevice& d, int size, const T* in, T* out);
 };
 #endif

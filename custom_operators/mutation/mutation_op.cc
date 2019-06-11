@@ -31,27 +31,31 @@ struct MutationFunctor<CPUDevice, T> {
 template <typename Device, typename T>
 class MutationOp : public OpKernel {
  public:
-  explicit MutationOp(OpKernelConstruction* context) : OpKernel(context) {}
+  explicit MutationOp(OpKernelConstruction* context) : OpKernel(context) 
+  {
+    
+  }
 
   void Compute(OpKernelContext* context) override {
-    // Grab the input tensor
-    const Tensor& input_tensor = context->input(0);
+      // Grab the input tensor
+      const Tensor& input_tensor = context->input(0);
 
-    // Create an output tensor
-    Tensor* output_tensor = NULL;
-    OP_REQUIRES_OK(context, context->allocate_output(0, input_tensor.shape(),
-                                                     &output_tensor));
+      // Create an output tensor
+      Tensor* output_tensor = NULL;
+      OP_REQUIRES_OK(context, context->allocate_output(0, input_tensor.shape(),
+                                                      &output_tensor));
 
-    // Do the computation.
-    OP_REQUIRES(context, input_tensor.NumElements() <= tensorflow::kint32max,
-                errors::InvalidArgument("Too many elements in tensor"));
-    MutationFunctor<Device, T>()(
-        context->eigen_device<Device>(),
-        static_cast<int>(input_tensor.NumElements()),
-        input_tensor.flat<T>().data(),
-        output_tensor->flat<T>().data());
+      // Do the computation.
+      OP_REQUIRES(context, input_tensor.NumElements() <= tensorflow::kint32max,
+                  errors::InvalidArgument("Too many elements in tensor"));
+      MutationFunctor<Device, T>()(
+          context->eigen_device<Device>(),
+          static_cast<int>(input_tensor.NumElements()),
+          input_tensor.flat<T>().data(),
+          output_tensor->flat<T>().data());
   }
 };
+
 
 // Register the CPU kernels.
 #define REGISTER_CPU(T)                                          \
@@ -61,11 +65,12 @@ class MutationOp : public OpKernel {
 REGISTER_CPU(float);
 REGISTER_CPU(int32);
 
+
 // Register the GPU kernels.
 #ifdef GOOGLE_CUDA
 #define REGISTER_GPU(T)                                          \
   /* Declare explicit instantiations in kernel_example.cu.cc. */ \
-  extern template ExampleFunctor<GPUDevice, T>;                  \
+  extern template MutationFunctor<GPUDevice, T>;                  \
   REGISTER_KERNEL_BUILDER(                                       \
       Name("Mutation").Device(DEVICE_GPU).TypeConstraint<T>("T"), \
       MutationOp<GPUDevice, T>);
@@ -87,58 +92,3 @@ REGISTER_GPU(int32);
 
 
 
-
-// #include "tensorflow/core/framework/op.h"
-// #include "tensorflow/core/framework/shape_inference.h"
-
-// using namespace tensorflow;
-
-// REGISTER_OP("Mutation")
-//     .Input("weight: float32")
-//     .Output("mutated: float32")
-//     .SetShapeFn([](::tensorflow::shape_inference::InferenceContext* c) {
-//       c->set_output(0, c->input(0));
-//       return Status::OK();
-//     });
-
-
-// #include "tensorflow/core/framework/op_kernel.h"
-// #include <random>
-// using namespace tensorflow;
-
-// class MutationOp : public OpKernel {
-//  public:
-//   explicit MutationOp(OpKernelConstruction* context) : OpKernel(context) {}
-
-//   void Compute(OpKernelContext* context) override {
-//     // Grab the input tensor
-//     const Tensor& input_tensor = context->input(0);
-//     auto input = input_tensor.flat<float32>();
-
-//     // Create an output tensor
-//     Tensor* output_tensor = NULL;
-//     OP_REQUIRES_OK(context, context->allocate_output(0, input_tensor.shape(),
-//                                                      &output_tensor));
-//     auto output_flat = output_tensor->flat<int32>();
-
-//     // Set all but the first element of the output tensor to 0.
-//     std::default_random_engine generator;
-//     std::default_random_engine generator_biased;
-
-//     std::uniform_real_distribution<double> distribution(0.0,1.0)
-//     std::uniform_real_distribution<double> distribution_biased(-1.0,1.0);
-
-
-//     const int N = input.size();
-//     for (int i = 0; i < N; i++) {
-//       output_flat(i) = input(i);
-//       if (distribution(generator) < 0.01) {
-//         output_flat(i) += distribution_biased(generator_biased);
-//       }
-//     }
-
-    
-//   }
-// };
-
-// REGISTER_KERNEL_BUILDER(Name("Mutation").Device(DEVICE_CPU), MutationOp);

@@ -100,7 +100,7 @@ def mutation_by_node(tensor, mutationRate):
         mutated = tensor + random_mutation
         # comparison = tf.math.equal( random_mutation, tf.constant( 0.0 ) )
         # mutated = tf.where(comparison, tensor, random_mutation)
-        return mutated;
+        return mutated
 
 
 def random_choice(a, axis, samples_shape=None):

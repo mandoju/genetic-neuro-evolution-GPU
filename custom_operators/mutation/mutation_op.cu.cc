@@ -40,6 +40,6 @@ void MutationFunctor<GPUDevice, T>::operator()(
 
 // Explicitly instantiate functors for the types of OpKernels registered.
 template struct MutationFunctor<GPUDevice, float>;
-template struct MutationFunctor<GPUDevice, int32>;
+template struct MutationFunctor<GPUDevice, float>;
 
 #endif  // GOOGLE_CUDA

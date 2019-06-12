@@ -1,10 +1,22 @@
 #include "mutation_op.h"
 #include "tensorflow/core/framework/op_kernel.h"
+#include "tensorflow/core/framework/shape_inference.h"
+
 
 using namespace tensorflow;
 
 using CPUDevice = Eigen::ThreadPoolDevice;
 using GPUDevice = Eigen::GpuDevice;
+
+
+REGISTER_OP("Mutation")
+    .Input("input: float32")
+    .Output("mutated: float32")
+    .SetShapeFn([](::tensorflow::shape_inference::InferenceContext* c) {
+      c->set_output(0, c->input(0));
+      return Status::OK();
+    });
+
 
 // CPU specialization of actual computation.
 template <typename T>

@@ -1,1 +1,5 @@
- g++ -std=c++11 -shared mutation_op.cc -o zero_out.so -fPIC -I "C:\projetos\cpp_libs" -I "C:\Users\jorge\Anaconda3\envs\tensorflow\lib\site-packages\tensorflow\include" -I "C:\Users\jorge\Anaconda3\envs\tensorflow\Lib\site-packages\tensorflow\include\external\eigen_archive" -I "C:\Users\jorge\Anaconda3\envs\tensorflow\Lib\site-packages\tensorflow\include\google\protobuf_archive\src" -L "C:\Users\jorge\Anaconda3\envs\tensorflow\lib\site-packages\tensorflow" -O2
+scl run devtoolset-7 bash
+TF_LFLAGS=( $(python -c 'import tensorflow as tf; print(" ".join(tf.sysconfig.get_link_flags()))') )
+TF_CFLAGS=( $(python -c 'import tensorflow as tf; print(" ".join(tf.sysconfig.get_compile_flags()))') )
+
+nvcc  -std=c++11 -c -o mutation_op.cu.o mutation_op.cu.cc ${TF_CFLAGS[@]} -D GOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -DNDEBUG -expt-relaxed-constexpr

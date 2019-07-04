@@ -18,16 +18,27 @@ def mutation(tensor, mutationRate, mutationTax):
 
         comparison = tf.math.greater(random_array_binary, mutationRate * 100)
 
-        random_array_binary = tf.where(comparison, tf.ones_like(random_array_binary),
-                                       tf.zeros_like(random_array_binary))
+        random_array_values = tf.random_uniform(dtype=tf.float32, minval=(1 - mutationTax), maxval=( 1 + mutationTax), shape=shapeSize)
 
-        random_array_values = tf.random_uniform(dtype=tf.float32, shape=shapeSize)
+        #random_array_values = tf.multiply(random_array_values, (2 * mutationTax)) + (1 - mutationTax)
 
-        random_array_values = tf.multiply(random_array_values, (2 * mutationTax)) + (1 - mutationTax)
+        # random_mutation = tf.multiply(random_array_binary, random_array_values)
+        # mutated = tf.multiply(tensor, random_mutation)
+        #
+        # mutated = tf.where(comparison, tensor, mutated)
+        mutated = tf.multiply(tensor, random_array_values)
 
-        random_mutation = tf.multiply(random_array_binary, random_array_values)
+        mutated = tf.where(comparison, tensor, mutated)
 
-        mutated = tf.multiply(tensor, random_mutation)
+        #
+        # random_array_values = tf.random_uniform(dtype=tf.float32, shape=shapeSize)
+        #
+        # random_array_values = tf.multiply(random_array_values, (2 * mutationTax)) + (1 - mutationTax)
+        #
+        # random_mutation = tf.multiply(random_array_binary, random_array_values)
+        #
+        # mutated = tf.multiply(tensor, random_mutation)
+
         # comparison = tf.math.equal( random_mutation, tf.constant( 0.0 ) )
         # mutated = tf.where(comparison, tensor, random_mutation)
         return mutated

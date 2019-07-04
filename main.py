@@ -17,9 +17,11 @@ import sys
 #    sys.exit()
 
 layers = [
-    GeneticLayer((1, 40), 40, 'wd', tf.math.tanh, 'd1'),
-    GeneticLayer((40, 12), 12, 'wd', tf.math.tanh, 'd2'),
-    GeneticLayer((12, 1), 1, 'wd', None, 'out')
+    GeneticLayer((1, 500), 500, 'wd', tf.math.tanh, 'd1'),
+    GeneticLayer((500, 250), 250, 'wd', tf.math.tanh, 'd2'),
+    GeneticLayer((250,100), 100, 'wd', tf.math.tanh, 'd3'),
+    GeneticLayer((100, 50), 50, 'wd', tf.math.tanh, 'd4'),
+    GeneticLayer((50, 1), 1, 'wd', None, 'out')
 ]
 
 train_x, train_y, test_x, test_y = get_sine_data()

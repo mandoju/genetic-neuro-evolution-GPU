@@ -208,15 +208,15 @@ class GeneticNeuralNetwork:
             # mutate = mutate * 2
         sess.close()
         file_string = []
-        # if (len(sys.argv) > 2):
-        #     file_string = './debug/graphs_logs/' + str(self.populationSize) + '_' + sys.argv[2] + '.pckl'
-        # else:
-        #     file_string = './debug/graphs_logs/' + str(self.populationSize) + '_10.pckl'
-        # with open(file_string, 'wb') as save_graph_file:
-        #     save_graph = Graph(tempos, fitnesses, acuracias, tempos_validation, validation_fitnesses,
-        #                        validation_acuracias, fine_tuning_graph)
-        #     pickle.dump(save_graph, save_graph_file)
-        #     print('salvei em: ' + '.debug/graphs_logs/' + str(self.populationSize) + '.pckl')
+        if (len(sys.argv) > 2):
+            file_string = './debug/graphs_logs/' + str(self.populationSize) + '_' + sys.argv[2] + '.pckl'
+        else:
+            file_string = './debug/graphs_logs/' + str(self.populationSize) + '_10.pckl'
+        with open(file_string, 'wb') as save_graph_file:
+            save_graph = Graph(tempos, fitnesses, acuracias, tempos_validation, validation_fitnesses,
+                               validation_acuracias, fine_tuning_graph)
+            pickle.dump(save_graph, save_graph_file)
+            print('salvei em: ' + '.debug/graphs_logs/' + str(self.populationSize) + '.pckl')
 
         # plt.plot(tempos, acuracias, '-', lw=2)
         # plt.grid(True)

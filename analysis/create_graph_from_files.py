@@ -2,7 +2,7 @@ from graph import Graph
 import matplotlib.pyplot as plt
 import pickle
 import sys
-
+import dill
 
 #files_pickle = ['./graphs/20.pckl','./graphs/40.pckl','./graphs/80.pckl','./graphs/160.pckl','./graphs/gradient_he.pckl']
 #files_pickle = ['./graphs/20_he.pckl','./graphs/40_he.pckl','./graphs/80_he.pckl','./graphs/160_he.pckl','./graphs/gradient_he.pckl']
@@ -67,17 +67,17 @@ class Graph_file:
 files_pickle = []
 graphs = []
 for argv in sys.argv[1:]:
-     file_pickle_opened = open('./graphs/' + argv, 'rb')
-     file_graph = pickle.load(file_pickle_opened) 
+     file_pickle_opened = open('../debug/graphs_logs/' + argv, 'rb')
+     file_graph = dill.load(file_pickle_opened)
      graph = Graph_file(file_graph,argv)
      graphs.append( graph )
      file_pickle_opened.close();
  
 for graph_file in graphs:
     graph = graph_file.graph
-    if(graph.performance[0] < 0):
-        graph.performance = [x * -1 for x in graph.performance]
-    plt.plot(graph.tempo,graph.performance , '-',label=graph_file.name)
+    if(graph.validation_performance[0] < 0):
+        graph.validation_performance = [x * -1 for x in graph.validation_performance]
+    plt.plot(graph.validation_tempo,graph.validation_performance , '-',label=graph_file.name)
 plt.legend(loc='upper right')
 plt.title("Loss x Tempo do conjunto de treino")
 plt.xlabel("Tempo (s)")

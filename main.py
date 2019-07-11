@@ -18,10 +18,10 @@ import sys
 
 layers = [
     GeneticLayer((1, 500), 500, 'wd', tf.math.tanh, 'd1'),
-    GeneticLayer((500, 250), 250, 'wd', tf.math.tanh, 'd2'),
-    GeneticLayer((250,100), 100, 'wd', tf.math.tanh, 'd3'),
-    GeneticLayer((100, 50), 50, 'wd', tf.math.tanh, 'd4'),
-    GeneticLayer((50, 1), 1, 'wd', None, 'out')
+    GeneticLayer((500, 500), 500, 'wd', tf.math.tanh, 'd2'),
+    GeneticLayer((500, 500), 500, 'wd', tf.math.tanh, 'd3'),
+    GeneticLayer((500, 500), 500, 'wd', tf.math.tanh, 'd4'),
+    GeneticLayer((500, 1), 1, 'wd', None, 'out')
 ]
 
 train_x, train_y, test_x, test_y = get_sine_data()
@@ -30,8 +30,8 @@ geneticSettings = {
     'train_y': train_y,
     'test_x': test_x,
     'test_y': test_y,
-    'populationSize': int(sys.argv[1]),
-    'epochs': 100,
+    'populationSize': 40, #int(sys.argv[1]),
+    'epochs': 10,
     'inner_loop': 1000,
     # 'weights_convulation': weights_convulation_input,
     # 'biases': biases_input,
@@ -44,7 +44,7 @@ geneticSettings = {
     'genetic_operators_size': [0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10],
     'fineTuningRate': 0.05,
     'layers': [785, 10],
-    'mutationRate': 0.01,
+    'mutationRate': 0.05,
     'logdir': './log/',
     'fineTuning': True
 }

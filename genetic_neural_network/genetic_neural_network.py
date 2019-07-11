@@ -11,7 +11,8 @@ import numpy as np
 import tensorflow as tf
 import time
 import matplotlib
-import pickle
+#import pickle
+import dill
 import sys
 
 # matplotlib.use('Agg')
@@ -92,6 +93,8 @@ class GeneticNeuralNetwork:
 
         train_x = self.neural_networks.train_x
         train_y = self.neural_networks.train_y
+        test_x = self.neural_networks.test_x
+        test_y = self.neural_networks.test_y
 
         acuracias = []
         fitnesses = []
@@ -116,16 +119,16 @@ class GeneticNeuralNetwork:
 
             batch_size = 10000
 
-            for batch in range(1):
-                # for batch in range( (len(train_x)//batch_size ) - 1 ):
+            #for batch in range(1):
+            for batch in range( (len(train_x)//batch_size ) - 1 ):
                 # for j in range(self.geneticSettings['inner_loop']):
-                print("batch: " + str(batch))
+                #print("batch: " + str(batch))
                 start_batch = time.time()
                 batch_x = train_x[batch * batch_size:min((batch + 1) * batch_size, len(train_x))]
                 batch_y = train_y[batch * batch_size:min((batch + 1) * batch_size, len(train_y))]
 
                 # print("Mutação atual: " + str(mutate) )
-                print(self.slice_sizes)
+                #print(self.slice_sizes)
                 fine_tuning_graph.append(self.slice_sizes[:])
 
                 session_time = time.time()
@@ -136,7 +139,7 @@ class GeneticNeuralNetwork:
                      fitness, assigns_weights, assigns_biases], feed_dict={
                         self.neural_networks.X: batch_x, self.neural_networks.Y: batch_y, self.mutationRate: mutate,
                         self.operatorSize: self.slice_sizes})#, options=run_options, run_metadata=run_metadata)
-                print("sessao demorou: " + str(time.time() - session_time))
+                #print("sessao demorou: " + str(time.time() - session_time))
                 writer.add_run_metadata(run_metadata, 'step%s' % (str(batch) + '_' + str(i)))
                 msg = "Batch: " + str(batch)
                 # np.savetxt('weights_save.txt',finished_conv[0])
@@ -144,9 +147,9 @@ class GeneticNeuralNetwork:
                 # np.savetxt('Y.txt',label_argmax)
                 # print("Accuracy: ")
                 # print(accuracies)
-                print("Cost: ")
-                print(cost[0:])
-                print("tempo atual: " + str(time.time() - start_time))
+                # print("Cost: ")
+                # print(cost[0:])
+                #print("tempo atual: " + str(time.time() - start_time))
                 # if(max(cost) < 3):
                 fitnesses.append(max(cost))
                 # acuracias.append(max(accuracies))
@@ -196,13 +199,15 @@ class GeneticNeuralNetwork:
             # batch = (len(train_x)//batch_size ) - 1
             # batch_x = train_x[batch*batch_size:min((batch+1)*batch_size,len(train_x))]
             # batch_y = train_y[batch*batch_size:min((batch+1)*batch_size,len(train_y))]
+            # batch_x = train_x[last_batch * batch_size:min((last_batch + 1) * batch_size, len(train_x))]
+            # batch_y = train_y[last_batch * batch_size:min((last_batch + 1) * batch_size, len(train_y))]
             final_predict, accuracies, cost = sess.run(
                 [self.neural_networks.predicts, self.neural_networks.accuracies, fitness], feed_dict={
-                    self.neural_networks.X: train_x, self.neural_networks.Y: train_y})
+                    self.neural_networks.X: test_x, self.neural_networks.Y: test_y})
             print("acuracia:" + str(accuracies[0]))
             validation_acuracias.append(accuracies[0])
-            print("fitness:" + str(cost[0]))
-            validation_fitnesses.append(cost[0])
+            print("fitness:" + str(cost))
+            validation_fitnesses.append(cost[0][0])
             tempos_validation.append(time.time() - start_time)
 
             # mutate = mutate * 2
@@ -213,15 +218,16 @@ class GeneticNeuralNetwork:
         else:
             file_string = './debug/graphs_logs/' + str(self.populationSize) + '_10.pckl'
         with open(file_string, 'wb') as save_graph_file:
+            print(len(tempos_validation))
             save_graph = Graph(tempos, fitnesses, acuracias, tempos_validation, validation_fitnesses,
                                validation_acuracias, fine_tuning_graph)
-            pickle.dump(save_graph, save_graph_file)
-            print('salvei em: ' + '.debug/graphs_logs/' + str(self.populationSize) + '.pckl')
+            dill.dump(save_graph, save_graph_file)
+            print('salvei em: ' + './debug/graphs_logs/' + str(self.populationSize) + '.pckl')
 
         # plt.plot(tempos, acuracias, '-', lw=2)
         # plt.grid(True)
         # plt.savefig('acuracias.png')
-        plt.plot(train_x, train_y, '-', label="seno")
-        plt.plot(train_x, final_predict[0], '-', label="neural_network")
-        plt.grid(True)
-        plt.show()
+        # plt.plot(train_x, train_y, '-', label="seno")
+        # plt.plot(train_x, final_predict[0], '-', label="neural_network")
+        # plt.grid(True)
+        # plt.show()

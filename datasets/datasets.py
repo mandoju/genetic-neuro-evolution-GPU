@@ -1,5 +1,6 @@
 import numpy as np
 import tensorflow as tf
+from sklearn.model_selection import train_test_split
 
 def get_mnist_data():
     mnist = tf.keras.datasets.mnist
@@ -37,7 +38,7 @@ def get_mnist_data_reshape():
 
 def get_sine_data():
     
-    x = np.arange(10000).reshape(-1,1) / 1000
+    x = np.arange(100000).reshape(-1,1) / 1000
     y = np.sin(x)
-
-    return x , y , x , y
+    X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
+    return X_train , y_train , X_test , y_test

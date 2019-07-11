@@ -4,7 +4,7 @@ class Graph:
         self.tempo = tempo
         self.performance = performance
         self.accuracy = accuracy
-        self.validation_tempo = validation_tempo
+        self.validation_tempo = tempo
         self.validation_performance = validation_performance
         self.validation_accuracy = validation_accuracy
         self.fine_tuning = fine_tuning

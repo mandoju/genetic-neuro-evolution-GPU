@@ -1,10 +1,14 @@
 import tensorflow as tf
 import numpy as np
+mutation_module = tf.load_op_library('/home/jorge/git/custom-op/tensorflow_mutation/python/ops/_mutation_ops.so')
 
 
 def function_map(xInput, mutationRate):
     return tf.map_fn(lambda x: tf.cond(x < mutationRate, lambda: 1.0, lambda: 0.0), xInput, dtype=tf.float32)
 
+#
+# def mutation(tensor,mutationRate,mutationTax):
+#     return mutation_module.mutation(tensor);
 
 def mutation(tensor, mutationRate, mutationTax):
     # depois fazer matrix mascara (a.k.a recomendacao do gabriel)

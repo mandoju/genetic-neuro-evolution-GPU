@@ -127,8 +127,18 @@ class Neural_network:
                 # train_accuracies = self.get_accuracies(predicts[0])
             with tf.name_scope('cost') as cost:
 
-                cost = tf.map_fn(lambda pred: tf.nn.softmax_cross_entropy_with_logits_v2(logits=pred, labels=self.Y),
-                                 predicts)
+                # cost = tf.map_fn(lambda pred: tf.nn.softmax_cross_entropy_with_logits_v2(logits=pred, labels=self.Y),
+                #                 predicts)
+                #
+                # print('cost')
+                placeholder_shape = tf.shape(self.X)
+                predicts_shape = tf.shape(self.predicts)
+                predicts_reshaped = tf.reshape(predicts,[placeholder_shape[0] * predicts_shape[0],y_size])
+                print(predicts)
+                cost = tf.nn.softmax_cross_entropy_with_logits_v2(logits=predicts_reshaped, labels=tf.tile(self.Y,[predicts_shape[0],1]))
+                cost = tf.reshape(cost,[predicts_shape[0],predicts_shape[1]])
+                print(cost)
+
                 # cost = tf.nn.softmax_cross_entropy_with_logits_v2(logits=predicts, labels=self.Y, axis=1)
                 if (self.classification):
                     cost = tf.reduce_mean(cost, 1)

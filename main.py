@@ -1,7 +1,7 @@
 import tensorflow as tf
 import numpy as np
 import time
-from datasets.datasets import get_mnist_data_reshape, get_sine_data
+from datasets.datasets import get_mnist_data_reshape, get_sine_data, get_mnist_data, get_mnist_data_feedforward
 # from win10toast import ToastNotifier
 from genetic_neural_network.geneticLayer import GeneticLayer
 from genetic_neural_network.genetic_neural_network import GeneticNeuralNetwork
@@ -17,26 +17,26 @@ import sys
 #    sys.exit()
 
 layers = [
-    GeneticLayer((1, 500), 500, 'wd', tf.math.tanh, 'd1'),
+    GeneticLayer((784, 500), 500, 'wd', tf.math.tanh, 'd1'),
     GeneticLayer((500, 500), 500, 'wd', tf.math.tanh, 'd2'),
     GeneticLayer((500, 500), 500, 'wd', tf.math.tanh, 'd3'),
     GeneticLayer((500, 500), 500, 'wd', tf.math.tanh, 'd4'),
-    GeneticLayer((500, 1), 1, 'wd', None, 'out')
+    GeneticLayer((500, 10), 10, 'wd', None, 'out')
 ]
 
-train_x, train_y, test_x, test_y = get_sine_data()
+train_x, train_y, test_x, test_y = get_mnist_data_feedforward()
 geneticSettings = {
     'train_x': train_x,
     'train_y': train_y,
     'test_x': test_x,
     'test_y': test_y,
     'populationSize': 40, #int(sys.argv[1]),
-    'epochs': 10,
+    'epochs': 20000,
     'inner_loop': 1000,
     # 'weights_convulation': weights_convulation_input,
     # 'biases': biases_input,
     'geneticLayers': layers,
-    'fitness': 'root_square_mean_error',
+    'fitness': 'cross_entropy',
     'selection': 'tournament',
     'elite': 0.20,
     'genetic_operators': [['crossover', 0.10], ['mutation', 0.1], ['mutation', 0.01], ['mutation', 0.001],

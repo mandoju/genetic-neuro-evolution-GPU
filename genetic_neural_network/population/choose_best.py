@@ -43,11 +43,13 @@ def choose_best_tensor_conv(genetic_layers: List[GeneticLayer], fitnesses, choos
         # tf.reshape(fitnesses, (-1,)), 4)
 
         print('-----')
+        print(fitnesses)
         print(top_indices)
         top_mutate_values, top_mutate_indices = tf.math.top_k(
             fitnesses, chooseNumber)
 
         for genetic_layer in genetic_layers:
+            print(tf.gather(genetic_layer.layer.weight,top_indices))
             genetic_layer.set_best(tf.gather(genetic_layer.layer.weight,top_indices),tf.gather(genetic_layer.layer.bias,top_indices))
         #print(top_indices)
         #return convulation_weights_output, biases_output  # , convulation_weights_best_output, biases_output_best, convulation_weights_mutate_output, biases_output_mutate

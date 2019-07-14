@@ -49,6 +49,8 @@ def apply_genetic_operatos(genetic_operators, genetic_operators_size, elite_size
         # print(genetic_layer.best_weights)
         # print(genetic_layer.operators_weights)
 
+        print(genetic_layer.layer.weight)
+        print(genetic_layer.best_weights)
         assigns_weights.append(tf.assign(genetic_layer.layer.weight,
                                          tf.concat([genetic_layer.best_weights] + genetic_layer.operators_weights,
                                                    axis=0)))

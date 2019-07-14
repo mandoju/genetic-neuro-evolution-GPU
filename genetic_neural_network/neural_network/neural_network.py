@@ -22,7 +22,7 @@ class Neural_network:
         # self.convulations = convulations
         # self.biases = biases
         # self.populationSize = populationSize
-        self.classification = False
+        self.classification = True
 
     def run_neural_structure(self, X):
 
@@ -107,7 +107,7 @@ class Neural_network:
             # self.X = tf.placeholder("float", shape=[None, 28, 28, 1], name="X")
             # self.Y = tf.placeholder("float", shape=[None, y_size], name="Y")
 
-            self.X = tf.placeholder("float", shape=[None, 1], name="X")
+            self.X = tf.placeholder("float", shape=[None, 784], name="X")
             self.Y = tf.placeholder("float", shape=[None, y_size], name="Y")
 
             X = self.X
@@ -129,10 +129,12 @@ class Neural_network:
 
                 cost = tf.map_fn(lambda pred: tf.nn.softmax_cross_entropy_with_logits_v2(logits=pred, labels=self.Y),
                                  predicts)
-                print(cost)
                 # cost = tf.nn.softmax_cross_entropy_with_logits_v2(logits=predicts, labels=self.Y, axis=1)
                 if (self.classification):
                     cost = tf.reduce_mean(cost, 1)
+
+                print("Custo:")
+                print(cost)
 
                 # cost = tf.map_fn(lambda pred: -tf.reduce_sum(self.Y * tf.log(pred)), predicts)
 

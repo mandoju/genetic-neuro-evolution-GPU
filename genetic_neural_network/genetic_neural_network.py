@@ -207,7 +207,7 @@ class GeneticNeuralNetwork:
             print("acuracia:" + str(accuracies[0]))
             validation_acuracias.append(accuracies[0])
             print("fitness:" + str(cost))
-            validation_fitnesses.append(cost[0][0])
+            validation_fitnesses.append(cost[0])
             tempos_validation.append(time.time() - start_time)
 
             # mutate = mutate * 2

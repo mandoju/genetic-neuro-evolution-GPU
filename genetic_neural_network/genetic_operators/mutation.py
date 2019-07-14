@@ -1,6 +1,6 @@
 import tensorflow as tf
 import numpy as np
-mutation_module = tf.load_op_library('/home/jorge/git/custom-op/tensorflow_mutation/python/ops/_mutation_ops.so')
+#mutation_module = tf.load_op_library('/home/jorge/git/custom-op/tensorflow_mutation/python/ops/_mutation_ops.so')
 
 
 def function_map(xInput, mutationRate):

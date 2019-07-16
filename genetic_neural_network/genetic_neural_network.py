@@ -117,7 +117,7 @@ class GeneticNeuralNetwork:
             print("época: " + str(i))
             start_generation = time.time()
 
-            batch_size = 10000
+            batch_size = 128
 
             #for batch in range(1):
             for batch in range( (len(train_x)//batch_size ) - 1 ):

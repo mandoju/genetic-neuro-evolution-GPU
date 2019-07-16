@@ -39,24 +39,26 @@ def apply_genetic_operatos(genetic_operators, genetic_operators_size, elite_size
 
     assigns_weights = []
     assigns_biases = []
-    for genetic_layer in genetic_layers:
-        for idx in range(len(genetic_operators)):
-            print(idx)
-            genetic_layer.add_operator(
-                *select_operator_and_apply(genetic_operators[idx][0], genetic_operators[idx][1],
-                                           tf.cast(genetic_operators_size[idx], dtype=tf.int32), elite_size,
-                                           mutationRate, genetic_layer))
-        # print(genetic_layer.best_weights)
-        # print(genetic_layer.operators_weights)
 
-        print(genetic_layer.layer.weight)
-        print(genetic_layer.best_weights)
-        assigns_weights.append(tf.assign(genetic_layer.layer.weight,
-                                         tf.concat([genetic_layer.best_weights] + genetic_layer.operators_weights,
-                                                   axis=0)))
-        assigns_biases.append(tf.assign(genetic_layer.layer.bias,
-                                        tf.concat([genetic_layer.best_biases] + genetic_layer.operators_biases,
-                                                  axis=0)))
+    with tf.name_scope('genetic_operations'):
+        for genetic_layer in genetic_layers:
+            for idx in range(len(genetic_operators)):
+                print(idx)
+                genetic_layer.add_operator(
+                    *select_operator_and_apply(genetic_operators[idx][0], genetic_operators[idx][1],
+                                               tf.cast(genetic_operators_size[idx], dtype=tf.int32), elite_size,
+                                               mutationRate, genetic_layer))
+            # print(genetic_layer.best_weights)
+            # print(genetic_layer.operators_weights)
+
+            print(genetic_layer.layer.weight)
+            print(genetic_layer.best_weights)
+            assigns_weights.append(tf.assign(genetic_layer.layer.weight,
+                                             tf.concat([genetic_layer.best_weights] + genetic_layer.operators_weights,
+                                                       axis=0)))
+            assigns_biases.append(tf.assign(genetic_layer.layer.bias,
+                                            tf.concat([genetic_layer.best_biases] + genetic_layer.operators_biases,
+                                                      axis=0)))
     return assigns_weights, assigns_biases
 
 

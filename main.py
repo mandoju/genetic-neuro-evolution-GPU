@@ -21,6 +21,10 @@ layers = [
     GeneticLayer((500, 500), 500, 'wd', tf.math.tanh, 'd2'),
     GeneticLayer((500, 500), 500, 'wd', tf.math.tanh, 'd3'),
     GeneticLayer((500, 500), 500, 'wd', tf.math.tanh, 'd4'),
+    # GeneticLayer((500, 500), 500, 'wd', tf.math.tanh, 'd5'),
+    # GeneticLayer((500, 500), 500, 'wd', tf.math.tanh, 'd6'),
+    # GeneticLayer((500, 500), 500, 'wd', tf.math.tanh, 'd7'),
+
     GeneticLayer((500, 10), 10, 'wd', None, 'out')
 ]
 
@@ -30,7 +34,7 @@ geneticSettings = {
     'train_y': train_y,
     'test_x': test_x,
     'test_y': test_y,
-    'populationSize': 60, #int(sys.argv[1]),
+    'populationSize': int(sys.argv[1]),
     'epochs': 800,
     'inner_loop': 1000,
     # 'weights_convulation': weights_convulation_input,

@@ -79,7 +79,7 @@ for graph_file in graphs:
         graph.validation_performance = [x * -1 for x in graph.validation_performance]
     plt.plot(graph.validation_tempo,graph.validation_performance , '-',label=("População de tamanho " + graph_file.name[:2]))
 plt.legend(loc='upper right')
-plt.title("Loss x Tempo do conjunto de treino com feedforward de 3 camadas ocultas")
+plt.title("Loss x Tempo do conjunto de treino com feedforward de 6 camadas ocultas")
 plt.xlabel("Tempo (s)")
 plt.ylabel("Loss (softmax cross entropy)")
 #plt.ylim(0,5)

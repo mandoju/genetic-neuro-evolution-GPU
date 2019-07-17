@@ -1,7 +1,7 @@
 import tensorflow as tf
 from typing import List
 from genetic_neural_network.geneticLayer import GeneticLayer
-
+from .config import getPlaceHolderType
 import numpy as np
 import time
 # from utils import variable_summaries
@@ -104,11 +104,11 @@ class Neural_network:
             print(self.train_y.shape)
             y_size = self.train_y.shape[1]
 
-            self.X = tf.placeholder("float", shape=[None, 28, 28, 1], name="X")
-            self.Y = tf.placeholder("float", shape=[None, y_size], name="Y")
-
             # self.X = tf.placeholder("float", shape=[None, 784], name="X")
             # self.Y = tf.placeholder("float", shape=[None, y_size], name="Y")
+
+            self.X = getPlaceHolderType()
+            self.Y = tf.placeholder("float", shape=[None, y_size], name="Y")
 
             X = self.X
             Y = self.Y

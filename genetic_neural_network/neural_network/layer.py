@@ -1,5 +1,5 @@
 import tensorflow as tf
-
+from .config import getLayerDimension, getExperimento
 
 class Layer:
 
@@ -40,12 +40,17 @@ class Layer:
         out = []
         print(self.type)
         if (self.type == 'wd'):
-            multiplication = tf.matmul(input, self.weight)
-            #out = tf.map_fn(lambda x: tf.add(multiplication[x], self.bias[x]), tf.range(self.populationSize),dtype=tf.float32)
-            bias_reshaped = tf.reshape(self.bias, [self.populationSize, 1, self.bias_size])
-            out = tf.add(multiplication, bias_reshaped)
+            if(getExperimento() == 1):
+                #Experimento 1
+                out = tf.map_fn(lambda x: tf.add(tf.matmul(x[0], x[1]), x[2]), (input,self.weight, self.bias),dtype=tf.float32)
+                out = tf.stack(out)
+            else:
+                # Experimento 2
+                multiplication = tf.matmul(input, self.weight)
+                bias_reshaped = tf.reshape(self.bias, [self.populationSize, 1, self.bias_size])
+                out = tf.add(multiplication, bias_reshaped)
             if (self.activation):
-                out = self.activation(out)
+                 out = self.activation(out)
 
         else:
             for i in range(self.populationSize):
@@ -69,7 +74,7 @@ class Layer:
             #out = tf.add(tf.matmul(input, self.weight[slice]), self.bias[slice])
             out = self.maxpool2d(out)
         if ( self.type == 'wcd'):
-            out = tf.reshape(out, [-1, 36])
+            out = tf.reshape(out, [-1, getLayerDimension()])
         return out
 
     def conv2d(self, x, W, b, strides=1):

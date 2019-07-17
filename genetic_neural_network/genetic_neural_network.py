@@ -79,7 +79,7 @@ class GeneticNeuralNetwork:
         self.current_epoch += 1
         sess = tf.Session()
 
-        writer = tf.summary.FileWriter(self.neural_networks.logdir, sess.graph)
+        writer = tf.summary.FileWriter(self.neural_networks.logdir +  '/' + sys.argv[2] + '_' + str(self.populationSize) + '/' , sess.graph)
         run_options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
         run_metadata = tf.RunMetadata()
 
@@ -216,7 +216,7 @@ class GeneticNeuralNetwork:
         if (len(sys.argv) > 2):
             file_string = './debug/graphs_logs/' + str(self.populationSize) + '_' + sys.argv[2] + '.pckl'
         else:
-            file_string = './debug/graphs_logs/' + str(self.populationSize) + '_10.pckl'
+            file_string = './debug/graphs_logs/' + str(self.populationSize) + '_sigmoid.pckl'
         with open(file_string, 'wb') as save_graph_file:
             print(len(tempos_validation))
             save_graph = Graph(tempos, fitnesses, acuracias, tempos_validation, validation_fitnesses,

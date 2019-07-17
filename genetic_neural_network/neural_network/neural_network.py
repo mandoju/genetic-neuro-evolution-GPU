@@ -104,11 +104,11 @@ class Neural_network:
             print(self.train_y.shape)
             y_size = self.train_y.shape[1]
 
-            # self.X = tf.placeholder("float", shape=[None, 28, 28, 1], name="X")
-            # self.Y = tf.placeholder("float", shape=[None, y_size], name="Y")
-
-            self.X = tf.placeholder("float", shape=[None, 784], name="X")
+            self.X = tf.placeholder("float", shape=[None, 28, 28, 1], name="X")
             self.Y = tf.placeholder("float", shape=[None, y_size], name="Y")
+
+            # self.X = tf.placeholder("float", shape=[None, 784], name="X")
+            # self.Y = tf.placeholder("float", shape=[None, y_size], name="Y")
 
             X = self.X
             Y = self.Y
@@ -133,7 +133,11 @@ class Neural_network:
                 # print('cost')
                 placeholder_shape = tf.shape(self.X)
                 predicts_shape = tf.shape(self.predicts)
+                print("shape")
+                print(predicts_shape)
+                print(placeholder_shape)
                 predicts_reshaped = tf.reshape(predicts,[placeholder_shape[0] * predicts_shape[0],y_size])
+                print(y_size)
                 print(predicts)
                 cost = tf.nn.softmax_cross_entropy_with_logits_v2(logits=predicts_reshaped, labels=tf.tile(self.Y,[predicts_shape[0],1]))
                 cost = tf.reshape(cost,[predicts_shape[0],predicts_shape[1]])

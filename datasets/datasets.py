@@ -2,6 +2,7 @@ import numpy as np
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 
+
 def get_mnist_data():
     mnist = tf.keras.datasets.mnist
     (train_X, train_y), (test_X, test_y) = mnist.load_data()
@@ -16,10 +17,11 @@ def get_mnist_data():
     test_y_eye = np.eye(num_labels)[test_y]  # One liner trick!
     # a,b,c,d = train_test_split(all_X, all_Y, test_size=0.00, random_state=0)
     # return (all_X, all_X, all_Y, all_Y)
-    #return train_X, train_y_eye, test_X, test_y_eye
+    # return train_X, train_y_eye, test_X, test_y_eye
 
     X_train, X_test, y_train, y_test = train_test_split(train_X, train_y_eye, test_size=0.2)
     return X_train, y_train, X_test, y_test
+
 
 def get_mnist_data_reshape():
     mnist = tf.keras.datasets.mnist
@@ -37,12 +39,13 @@ def get_mnist_data_reshape():
     # return (all_X, all_X, all_Y, all_Y)
     train_X = train_X.reshape(-1, 28, 28, 1)
 
-    #test_X = test_X.reshape(-1, 28, 28, 1)
-    #return train_X, train_y_eye, test_X, test_y_eye
+    # test_X = test_X.reshape(-1, 28, 28, 1)
+    # return train_X, train_y_eye, test_X, test_y_eye
     X_train, X_test, y_train, y_test = train_test_split(train_X, train_y_eye, test_size=0.2)
     return X_train, y_train, X_test, y_test
 
-def get_mnist_data_feedforward():
+
+def get_mnist_data_feedforward(reshape=False):
     mnist = tf.keras.datasets.mnist
     (train_X, train_y), (test_X, test_y) = mnist.load_data()
     train_X = np.array(train_X).reshape(len(train_X), 784)
@@ -56,17 +59,20 @@ def get_mnist_data_feedforward():
     test_y_eye = np.eye(num_labels)[test_y]  # One liner trick!
     # a,b,c,d = train_test_split(all_X, all_Y, test_size=0.00, random_state=0)
     # return (all_X, all_X, all_Y, all_Y)
-    train_X = train_X.reshape(-1, 784)
+    if (reshape):
+        train_X = train_X.reshape(-1, 28, 28, 1)
+    else:
+        train_X = train_X.reshape(-1, 784)
 
-    #test_X = test_X.reshape(-1, 28, 28, 1)
-    #return train_X, train_y_eye, test_X, test_y_eye
-    X_train, X_test, y_train, y_test = train_test_split(train_X, train_y_eye, test_size=0.2)
+    # test_X = test_X.reshape(-1, 28, 28, 1)
+    # return train_X, train_y_eye, test_X, test_y_eye
+    X_train, X_test, y_train, y_test = train_test_split(train_X, train_y_eye, test_size=0.001)
+
     return X_train, y_train, X_test, y_test
 
 
 def get_sine_data():
-    
-    x = np.arange(100000).reshape(-1,1) / 1000
+    x = np.arange(100000).reshape(-1, 1) / 1000
     y = np.sin(x)
     X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
-    return X_train , y_train , X_test , y_test
+    return X_train, y_train, X_test, y_test

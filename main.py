@@ -17,10 +17,17 @@ import sys
 #    sys.exit()
 
 layers = [
-    GeneticLayer((784, 500), 500, 'wd', tf.math.tanh, 'd1'),
-    GeneticLayer((500, 500), 500, 'wd', tf.math.tanh, 'd2'),
-    GeneticLayer((500, 500), 500, 'wd', tf.math.tanh, 'd3'),
-    GeneticLayer((500, 500), 500, 'wd', tf.math.tanh, 'd4'),
+    GeneticLayer((3,3,1,36), 36, 'wc', tf.nn.relu,'c1'),
+    GeneticLayer((3, 3, 36, 36), 36, 'wc', tf.nn.relu, 'c2'),
+    GeneticLayer((3, 3, 36, 36), 36, 'wc', tf.nn.relu, 'c3'),
+    GeneticLayer((3, 3, 36, 36), 36, 'wc', tf.nn.relu, 'c4'),
+    GeneticLayer((3, 3, 36, 36), 36, 'wc', tf.nn.relu, 'c5'),
+    GeneticLayer((3, 3, 36, 36), 36, 'wcd', tf.nn.relu, 'c6'),
+
+    #GeneticLayer((784, 500), 500, 'wd', tf.math.tanh, 'd1'),
+    #GeneticLayer((500, 500), 500, 'wd', tf.math.tanh, 'd2'),
+    #GeneticLayer((500, 500), 500, 'wd', tf.math.tanh, 'd3'),
+    GeneticLayer((36, 500), 500, 'wd', tf.math.tanh, 'd1'),
     # GeneticLayer((500, 500), 500, 'wd', tf.math.tanh, 'd5'),
     # GeneticLayer((500, 500), 500, 'wd', tf.math.tanh, 'd6'),
     # GeneticLayer((500, 500), 500, 'wd', tf.math.tanh, 'd7'),
@@ -28,14 +35,14 @@ layers = [
     GeneticLayer((500, 10), 10, 'wd', None, 'out')
 ]
 
-train_x, train_y, test_x, test_y = get_mnist_data_feedforward()
+train_x, train_y, test_x, test_y = get_mnist_data_feedforward(True)
 geneticSettings = {
     'train_x': train_x,
     'train_y': train_y,
     'test_x': test_x,
     'test_y': test_y,
     'populationSize': int(sys.argv[1]),
-    'epochs': 800,
+    'epochs': 1,
     'inner_loop': 1000,
     # 'weights_convulation': weights_convulation_input,
     # 'biases': biases_input,

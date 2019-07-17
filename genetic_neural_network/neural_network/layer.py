@@ -24,6 +24,13 @@ class Layer:
             #out = tf.map_fn(lambda x: tf.add(tf.gather(multiplication,x), tf.gather(self.bias,x)), tf.range(self.populationSize),dtype=tf.float32)
             if (self.activation):
                 out = self.activation(out)
+        elif (self.type == 'wc'):
+            # out = tf.map_fn(lambda x: self.conv2d(input, self.weight[x], self.bias[x]),
+            #                 tf.range(self.populationSize), dtype=tf.float32)
+            out = tf.map_fn(lambda x: self.conv2d(input, x[0], x[1]),
+                            (self.weight,self.bias), dtype=tf.float32)
+            out = tf.map_fn(lambda x: self.maxpool2d(x, k=2), out, dtype=tf.float32)
+
         else:
             for i in range(self.populationSize):
                 out.append(self.run_slice(input, i))
@@ -31,6 +38,7 @@ class Layer:
 
     def run(self, input):
         out = []
+        print(self.type)
         if (self.type == 'wd'):
             multiplication = tf.matmul(input, self.weight)
             #out = tf.map_fn(lambda x: tf.add(multiplication[x], self.bias[x]), tf.range(self.populationSize),dtype=tf.float32)
@@ -38,15 +46,18 @@ class Layer:
             out = tf.add(multiplication, bias_reshaped)
             if (self.activation):
                 out = self.activation(out)
+
         else:
             for i in range(self.populationSize):
                 out.append(self.run_slice(input[i], i))
+            if(self.type == 'wcd'):
+                out = tf.stack(out)
         return out
 
     def run_slice(self, input, slice):
-        if (self.type == 'wc'):
+        if (self.type == 'wc' or self.type == 'wcd'):
             out = self.conv2d(input, self.weight[slice], self.bias[slice])
-        if (self.type == 'wd'):
+        if (self.type == 'wd' ):
             out = tf.add(tf.matmul(input, self.weight[slice]), self.bias[slice])
         # if(self.activation == 'relu'):
         #     out = tf.nn.relu(out)
@@ -54,6 +65,11 @@ class Layer:
         #     out = tf.nn.sigmoid(out)
         if (self.activation):
             out = self.activation(out)
+        if (self.type == 'wc' or self.type == 'wcd'):
+            #out = tf.add(tf.matmul(input, self.weight[slice]), self.bias[slice])
+            out = self.maxpool2d(out)
+        if ( self.type == 'wcd'):
+            out = tf.reshape(out, [-1, 36])
         return out
 
     def conv2d(self, x, W, b, strides=1):

@@ -1,5 +1,50 @@
 #!/bin/bash
 source ~/venv/bin/activate
-( nohup python main.py 20 exp2_feed_6 feed_foward_3 sigmoid exp2 ; 
-nohup python main.py 40 exp2_feed_6 feed_foward_3 sigmoid exp ;
-nohup python main.py 60 exp2_feed_6 feed_foward_3 sigmoid exp ; ) &
+( nohup python main.py 20 exp2_feed_3 feed_foward_3 sigmoid exp2 ; 
+nohup python main.py 40 exp2_feed_3 feed_foward_3 sigmoid exp2 ;
+nohup python main.py 60 exp2_feed_3 feed_foward_3 sigmoid exp2 ;
+nohup python main.py 20 exp2_feed_6 feed_foward_6 sigmoid exp2 ; 
+nohup python main.py 40 exp2_feed_6 feed_foward_6 sigmoid exp2 ;
+nohup python main.py 60 exp2_feed_6 feed_foward_6 sigmoid exp2 ;
+nohup python main.py 20 exp2_cnn_3 cnn_3 sigmoid exp2 ; 
+nohup python main.py 40 exp2_cnn_3 cnn_3 sigmoid exp2 ;
+nohup python main.py 60 exp2_cnn_3 cnn_3 sigmoid exp2 ;
+nohup python main.py 20 exp2_cnn_6 cnn_6 sigmoid exp2 ; 
+nohup python main.py 40 exp2_cnn_6 cnn_6 sigmoid exp2 ;
+nohup python main.py 60 exp2_cnn_6 cnn_6 sigmoid exp2 ;
+nohup python main.py 20 exp2_feed_3_tanh feed_foward_3 tanh exp2 ; 
+nohup python main.py 40 exp2_feed_3_tanh feed_foward_3 tanh exp2 ;
+nohup python main.py 60 exp2_feed_3_tanh feed_foward_3 tanh exp2 ;
+nohup python main.py 20 exp2_feed_6_tanh feed_foward_6 tanh exp2 ; 
+nohup python main.py 40 exp2_feed_6_tanh feed_foward_6 tanh exp2 ;
+nohup python main.py 60 exp2_feed_6_tanh feed_foward_6 tanh exp2 ;
+nohup python main.py 20 exp2_cnn_3_tanh cnn_3 tanh exp2 ; 
+nohup python main.py 40 exp2_cnn_3_tanh cnn_3 tanh exp2 ;
+nohup python main.py 60 exp2_cnn_3_tanh cnn_3 tanh exp2 ;
+nohup python main.py 20 exp2_cnn_6_tanh cnn_6 tanh exp2 ; 
+nohup python main.py 40 exp2_cnn_6_tanh cnn_6 tanh exp2 ;
+nohup python main.py 60 exp2_cnn_6_tanh cnn_6 tanh exp2 ;
+nohup python main.py 20 exp1_feed_3 feed_foward_3 sigmoid exp1 ; 
+nohup python main.py 40 exp1_feed_3 feed_foward_3 sigmoid exp1 ;
+nohup python main.py 60 exp1_feed_3 feed_foward_3 sigmoid exp1 ;
+nohup python main.py 20 exp1_feed_6 feed_foward_6 sigmoid exp1 ; 
+nohup python main.py 40 exp1_feed_6 feed_foward_6 sigmoid exp1 ;
+nohup python main.py 60 exp1_feed_6 feed_foward_6 sigmoid exp1 ;
+nohup python main.py 20 exp1_cnn_3 cnn_3 sigmoid exp1 ; 
+nohup python main.py 40 exp1_cnn_3 cnn_3 sigmoid exp1 ;
+nohup python main.py 60 exp1_cnn_3 cnn_3 sigmoid exp1 ;
+nohup python main.py 20 exp1_cnn_6 cnn_6 sigmoid exp1 ; 
+nohup python main.py 40 exp1_cnn_6 cnn_6 sigmoid exp1 ;
+nohup python main.py 60 exp1_cnn_6 cnn_6 sigmoid exp1 ;
+nohup python main.py 20 exp1_feed_3_tanh feed_foward_3 tanh exp1 ; 
+nohup python main.py 40 exp1_feed_3_tanh feed_foward_3 tanh exp1 ;
+nohup python main.py 60 exp1_feed_3_tanh feed_foward_3 tanh exp1 ;
+nohup python main.py 20 exp1_feed_6_tanh feed_foward_6 tanh exp1 ; 
+nohup python main.py 40 exp1_feed_6_tanh feed_foward_6 tanh exp1 ;
+nohup python main.py 60 exp1_feed_6_tanh feed_foward_6 tanh exp1 ;
+nohup python main.py 20 exp1_cnn_3_tanh cnn_3 tanh exp1 ; 
+nohup python main.py 40 exp1_cnn_3_tanh cnn_3 tanh exp1 ;
+nohup python main.py 60 exp1_cnn_3_tanh cnn_3 tanh exp1 ;
+nohup python main.py 20 exp1_cnn_6_tanh cnn_6 tanh exp1 ; 
+nohup python main.py 40 exp1_cnn_6_tanh cnn_6 tanh exp1 ;
+nohup python main.py 60 exp1_cnn_6_tanh cnn_6 tanh exp1 ) &

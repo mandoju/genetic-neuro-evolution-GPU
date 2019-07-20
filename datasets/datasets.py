@@ -66,7 +66,7 @@ def get_mnist_data_feedforward(reshape=False):
 
     # test_X = test_X.reshape(-1, 28, 28, 1)
     # return train_X, train_y_eye, test_X, test_y_eye
-    X_train, X_test, y_train, y_test = train_test_split(train_X, train_y_eye, test_size=0.001)
+    X_train, X_test, y_train, y_test = train_test_split(train_X, train_y_eye, test_size=0.2)
 
     return X_train, y_train, X_test, y_test
 

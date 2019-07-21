@@ -26,21 +26,18 @@ class Neural_network:
 
     def run_neural_structure(self, X):
 
-        # weights = self.convulations
-        # biases = self.biases
-
-        # layer_1 = Layer(self.populationSize,weights['wd1'], biases['bc1'],'wd',tf.math.tanh)
-        # layer_2 = Layer(self.populationSize,weights['wd2'], biases['bc2'],'wd',tf.math.tanh)
-        # layer_3 = Layer(self.populationSize,weights['out'], biases['out'],'wd')
-
         layer_output = self.geneticLayers[0].layer.run_fist_layer(X)
 
         for geneticLayer in self.geneticLayers[1:]:
             layer_output = geneticLayer.layer.run(layer_output)
 
-        # layer_1_out = layer_1.run_fist_layer(X)
-        # layer_2_out = layer_2.run(layer_1_out)
-        # layer_3_out = layer_3.run(layer_2_out)
+        return layer_output
+    def run_neural_structure_validation(self, X):
+
+        layer_output = self.geneticLayers[0].layer.run_first_layer_validation(X)
+        for geneticLayer in self.geneticLayers[1:]:
+            layer_output = geneticLayer.layer.run_validation(layer_output)
+            print(layer_output)
 
         return layer_output
 
@@ -123,7 +120,7 @@ class Neural_network:
 
                 train_accuracies = tf.map_fn(
                     lambda x: self.get_accuracies(x), predicts)
-                #train_accuracies = self.get_accuracies(predicts)
+                # train_accuracies = self.get_accuracies(predicts)
                 # train_accuracies = self.get_accuracies(predicts[0])
             with tf.name_scope('cost') as cost:
 
@@ -154,13 +151,13 @@ class Neural_network:
 
             with tf.name_scope('square_mean_error') as scope:
 
-                 square_mean_error = tf.map_fn(lambda pred: tf.reduce_mean(tf.squared_difference(tf.cast(tf.argmax(
+                square_mean_error = tf.map_fn(lambda pred: tf.reduce_mean(tf.squared_difference(tf.cast(tf.argmax(
                     pred, axis=1, name="label_test_argmax_sme"), tf.float32),
                     tf.cast(tf.argmax(self.Y, axis=1, name="label_test_argmax_sme"), tf.float32))), predicts)
-                # argmax_y = tf.cast(tf.argmax(self.Y, axis=1, name="label_test_argmax_sme"), dtype=tf.float32)
-                # argmax_pred = tf.cast(tf.argmax(predicts, axis=2, name="label_test_argmax_sme"), dtype=tf.float32)
-                # squared_differences = tf.squared_difference(argmax_pred, argmax_y)
-                # square_mean_error = tf.reduce_mean(squared_differences, axis=1)
+            # argmax_y = tf.cast(tf.argmax(self.Y, axis=1, name="label_test_argmax_sme"), dtype=tf.float32)
+            # argmax_pred = tf.cast(tf.argmax(predicts, axis=2, name="label_test_argmax_sme"), dtype=tf.float32)
+            # squared_differences = tf.squared_difference(argmax_pred, argmax_y)
+            # square_mean_error = tf.reduce_mean(squared_differences, axis=1)
             with tf.name_scope('root_square_mean_error') as scope:
 
                 # root_square_mean_error = tf.map_fn(lambda pred: tf.sqrt(
@@ -192,6 +189,102 @@ class Neural_network:
 
             # return train_accuracies_session
             return self.accuracies
+
+    def run_validation(self):
+        # print("Rodando rede neural")
+
+        # mnist
+        with tf.name_scope('Fitness_Validation') as scope:
+
+            y_size = self.train_y.shape[1]
+
+            # self.X = tf.placeholder("float", shape=[None, 784], name="X")
+            # self.Y = tf.placeholder("float", shape=[None, y_size], name="Y")
+
+
+            X = self.X
+            Y = self.Y
+
+            with tf.name_scope('validation_predicts') as scope:
+
+                self.validation_predicts = self.run_neural_structure_validation(X)
+                predicts = self.validation_predicts
+
+            with tf.name_scope('validation_accuracies') as scope:
+
+                train_accuracies = self.get_accuracies(predicts)
+                # train_accuracies = self.get_accuracies(predicts)
+                # train_accuracies = self.get_accuracies(predicts[0])
+            with tf.name_scope('validation_cost') as cost:
+
+                 cost = tf.nn.softmax_cross_entropy_with_logits_v2(logits=predicts, labels=self.Y)
+                 if (self.classification):
+                  cost = tf.reduce_mean(cost, 0)
+                 print("Custo:")
+                 print(cost)
+
+            # print('cost')
+                # placeholder_shape = tf.shape(self.X)
+                # predicts_shape = tf.shape(self.predicts)
+                # print("shape")
+                # print(predicts_shape)
+                # print(placeholder_shape)
+                # predicts_reshaped = tf.reshape(predicts, [placeholder_shape[0] * predicts_shape[0], y_size])
+                # print(y_size)
+                # print(predicts)
+                # cost = tf.nn.softmax_cross_entropy_with_logits_v2(logits=predicts_reshaped,
+                #                                                   labels=tf.tile(self.Y, [predicts_shape[0], 1]))
+                # cost = tf.reshape(cost, [predicts_shape[0], predicts_shape[1]])
+                # print(cost)
+
+                # cost = tf.nn.softmax_cross_entropy_with_logits_v2(logits=predicts, labels=self.Y, axis=1)
+                #if (self.classification):
+                 #  cost = tf.reduce_mean(cost, 1)
+
+
+                # cost = tf.map_fn(lambda pred: -tf.reduce_sum(self.Y * tf.log(pred)), predicts)
+
+            with tf.name_scope('square_mean_error') as scope:
+
+                square_mean_error = tf.reduce_mean(tf.squared_difference(tf.cast(tf.argmax(
+                    predicts, axis=1, name="label_test_argmax_sme"), tf.float32),
+                    tf.cast(tf.argmax(self.Y, axis=1, name="label_test_argmax_sme"), tf.float32)))
+            # argmax_y = tf.cast(tf.argmax(self.Y, axis=1, name="label_test_argmax_sme"), dtype=tf.float32)
+            # argmax_pred = tf.cast(tf.argmax(predicts, axis=2, name="label_test_argmax_sme"), dtype=tf.float32)
+            # squared_differences = tf.squared_difference(argmax_pred, argmax_y)
+            # square_mean_error = tf.reduce_mean(squared_differences, axis=1)
+            with tf.name_scope('root_square_mean_error') as scope:
+
+                # root_square_mean_error = tf.map_fn(lambda pred: tf.sqrt(
+                #     tf.reduce_mean(tf.square(tf.subtract(Y, pred)))), predicts, dtype=tf.float32)
+                # print(root_square_mean_error)
+                squared_differences = tf.square(tf.subtract(Y, predicts))
+
+                root_square_mean_error = tf.reduce_mean(squared_differences, axis=1)
+
+                # print(root_square_mean_error)
+            # Utilizacao das acuracias e predicts como tensores
+            # self.predicts = predicts
+            if (self.classification):
+                self.validation_argmax_predicts = tf.argmax(predicts, 1)
+            else:
+                self.validation_argmax_predicts = predicts
+            self.validation_accuracies = train_accuracies
+            self.validation_cost = cost
+            self.validation_square_mean_error = square_mean_error
+            self.validation_root_square_mean_error = root_square_mean_error
+            self.validation_label_argmax = tf.cast(tf.argmax(
+                self.Y, axis=1, name="label_test_argmax_sme"), tf.float32)
+
+            # writer.close()
+            # sess.close()
+
+            # self.predicts = predicts_session
+            # self.accuracies = train_accuracies_session
+
+            # return train_accuracies_session
+            return self.validation_accuracies
+
 
 #
 # def calculate_fitness(neural_networks, layers, logdir):

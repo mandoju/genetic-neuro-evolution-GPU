@@ -77,6 +77,53 @@ class Layer:
             out = tf.reshape(out, [-1, getLayerDimension()])
         return out
 
+    def run_first_layer_validation(self, input):
+        out = []
+        # for i in range(self.populationSize):
+        #    out.append(self.run_slice(input, i))
+        if (self.type == 'wd'):
+            #input_replicated = tf.tile(tf.expand_dims(input, 0), [self.populationSize, 1, 1])
+            # out = tf.add(tf.matmul(input_replicated, self.weight), self.bias)
+            multiplication = tf.matmul(input, self.weight[0])
+            #bias_reshaped = tf.reshape(self.bias[0], [self.populationSize, 1, self.bias_size])
+            out = tf.add(multiplication, self.bias[0])
+            # out = tf.map_fn(lambda x: tf.add(tf.gather(multiplication,x), tf.gather(self.bias,x)), tf.range(self.populationSize),dtype=tf.float32)
+            if (self.activation):
+                out = self.activation(out)
+
+        elif (self.type == 'wc'):
+            # out = tf.map_fn(lambda x: self.conv2d(input, self.weight[x], self.bias[x]),
+            #                 tf.range(self.populationSize), dtype=tf.float32)
+            out = self.conv2d(input, self.weight[0], self.bias[0])
+            out = self.maxpool2d(out, k=2)
+
+        else:
+            out = self.run_slice(input, 0)
+        return out
+
+    def run_validation(self, input):
+        out = []
+        print(self.type)
+        if (self.type == 'wd'):
+            if(getExperimento() == 1):
+                #Experimento 1
+                out = tf.add(tf.matmul(input,self.weight[0]),self.bias[0])
+                #out = tf.map_fn(lambda x: tf.add(tf.matmul(x[0], x[1]), x[2]), (input,self.weight, self.bias),dtype=tf.float32)
+               # out = tf.stack(out)
+            else:
+                # Experimento 2
+                multiplication = tf.matmul(input, self.weight[0])
+                #bias_reshaped = tf.reshape(self.bias, [self.populationSize, 1, self.bias_size])
+                out = tf.add(multiplication, self.bias[0])
+            if (self.activation):
+                 out = self.activation(out)
+
+        else:
+            out = self.run_slice(input, 0)
+            # if(self.type == 'wcd'):
+            #      out = tf.stack(out)
+        return out
+
     def conv2d(self, x, W, b, strides=1):
         # Conv2D wrapper, with bias and relu activation
         x = tf.nn.conv2d(

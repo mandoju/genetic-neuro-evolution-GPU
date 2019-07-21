@@ -50,17 +50,24 @@ class GeneticNeuralNetwork:
         self.mutationRate = tf.placeholder(tf.float32, shape=[])
         self.operatorSize = tf.placeholder(tf.float32, shape=[len(self.geneticSettings['genetic_operators_size'])])
         self.neural_networks.run()
+        self.neural_networks.run_validation()
 
         if (self.geneticSettings['fitness'] == 'cross_entropy'):
             fitness = -self.neural_networks.cost
+            fitness_validation = -self.neural_networks.validation_cost
         elif (self.geneticSettings['fitness'] == 'square_mean_error'):
             fitness = -self.neural_networks.square_mean_error
+            fitness_validation = -self.neural_networks.validation_square_mean_error
         elif (self.geneticSettings['fitness'] == 'root_square_mean_error'):
             fitness = -self.neural_networks.root_square_mean_error
+            fitness_validation = -self.neural_networks.validation_square_mean_error
         elif (self.geneticSettings['fitness'] == 'cross_entropy_mix_accuracies'):
             fitness = self.neural_networks.accuracies + self.neural_networks.cost
+            fitness_validation = self.neural_networks.validation_accuracies + self.neural_networks.validation_cost
+
         else:
             fitness = self.neural_networks.accuracies
+            fitness_validation = self.neural_networks.validation_accuracies
 
         print("choose best")
         choose_best(
@@ -201,13 +208,17 @@ class GeneticNeuralNetwork:
             # batch_y = train_y[batch*batch_size:min((batch+1)*batch_size,len(train_y))]
             # batch_x = train_x[last_batch * batch_size:min((last_batch + 1) * batch_size, len(train_x))]
             # batch_y = train_y[last_batch * batch_size:min((last_batch + 1) * batch_size, len(train_y))]
-            final_predict, accuracies, cost = sess.run(
-                [self.neural_networks.predicts, self.neural_networks.accuracies, fitness], feed_dict={
+            run_opts = tf.RunOptions(report_tensor_allocations_upon_oom=True)
+
+
+            accuracies, cost = sess.run(
+                [self.neural_networks.validation_accuracies, fitness_validation], feed_dict={
                     self.neural_networks.X: test_x, self.neural_networks.Y: test_y})
-            print("acuracia:" + str(accuracies[0]))
-            validation_acuracias.append(accuracies[0])
+
+            print("acuracia:" + str(accuracies))
+            validation_acuracias.append(accuracies)
             print("fitness:" + str(cost))
-            validation_fitnesses.append(cost[0])
+            validation_fitnesses.append(cost)
             tempos_validation.append(time.time() - start_time)
 
             # mutate = mutate * 2

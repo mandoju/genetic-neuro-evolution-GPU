@@ -62,60 +62,28 @@ def tournament(fitnesses, indexes):
     return indexes[get_best_index[0]]
 
 
-def choose_best_tensor_tournament(convulations, biases, fitnesses, chooseNumber):
+def choose_best_tensor_tournament(genetic_layers: List[GeneticLayer], fitnesses, chooseNumber):
     with tf.name_scope('Choose_best') as scope:
 
         tournamentSize = tf.shape(fitnesses)[0] // chooseNumber
+
 
         numbers_to_tournament = tf.range(tf.shape(fitnesses)[0])
         numbers_to_tournament = tf.random.shuffle(numbers_to_tournament)
         numbers_to_tournament = tf.reshape(numbers_to_tournament,
                                            [tf.shape(numbers_to_tournament)[0] // tournamentSize, tournamentSize])
 
+        fitnesses = tf.squeeze(fitnesses)
         top_indices = tf.map_fn(lambda x: tournament(fitnesses, x), numbers_to_tournament)
-        top_mutate_indices = tf.tile(top_indices, [8])
+        top_indices = tf.stack(top_indices)
+        for genetic_layer in genetic_layers:
+            print(tf.gather(genetic_layer.layer.weight,top_indices))
+            genetic_layer.set_best(tf.gather(genetic_layer.layer.weight,top_indices),tf.gather(genetic_layer.layer.bias,top_indices))
 
-        convulations_weights_keys = list(convulations.keys())
-        convulation_weights_output = {
-            key: None for key in convulations_weights_keys}
-        biases_output_keys = list(biases.keys())
-        biases_output = {key: None for key in biases_output_keys}
-
-        convulation_weights_best_output = {
-            key: None for key in convulations_weights_keys}
-        biases_output_best = {key: None for key in biases_output_keys}
-
-        convulation_weights_mutate_output = {
-            key: None for key in convulations_weights_keys}
-        biases_output_mutate = {key: None for key in biases_output_keys}
-
-        for key in convulations:
-            print(convulations[key])
-            convulation_weights_output[key] = tf.gather(convulations[key],
-                                                        top_indices)  # tf.slice(convulation_weights_best_output[key],conv_shape_zero, conv_shape_altered )
-            convulation_weights_mutate_output[key] = tf.gather(convulations[key],
-                                                               top_mutate_indices)  # tf.slice(convulation_weights_best_output[key],conv_shape_zero, conv_shape_altered )
-
-            # tf.stack(
-            #     [convulations[key][top_indices[0]], convulations[key][top_indices[1]], convulations[key][top_indices[2]], convulations[key][top_indices[3]]])
-            convulation_weights_best_output[key] = convulations[key][top_indices[0]]
-        for key in biases:
-            # print(idx);
-            biases_output[key] = tf.gather(biases[key], top_indices)  # [top_indices[0]:top_indices[chooseNumber - 1]]
-            biases_output_mutate[key] = tf.gather(biases[key],
-                                                  top_mutate_indices)  # [top_indices[0]:top_indices[chooseNumber - 1]]
-
-            # tf.stack(
-            #     [biases[key][top_indices[0]], biases[key][top_indices[1]], biases[key][top_indices[2]], biases[key][top_indices[3]]])
-            biases_output_best[key] = biases[key][top_indices[0]]
-
-        # neural_networks_output = tf.stack([neural_networks[top_indices[0]],neural_networks[top_indices[1]]])
-        # return neural_networks_output;
-        return convulation_weights_output, biases_output, convulation_weights_best_output, biases_output_best, convulation_weights_mutate_output, biases_output_mutate
 
 
 def choose_best(chooseType, genetic_layers, fitnesses, chooseNumber):
-    # if(chooseType == 'tournament'):
-    #    return choose_best_tensor_tournament(convulations, biases, fitnesses, chooseNumber)
-    # else:
-    return choose_best_tensor_conv(genetic_layers, fitnesses, chooseNumber)
+    if(chooseType == 'tournament'):
+       return choose_best_tensor_tournament(genetic_layers, fitnesses, chooseNumber)
+    else:
+        return choose_best_tensor_conv(genetic_layers, fitnesses, chooseNumber)

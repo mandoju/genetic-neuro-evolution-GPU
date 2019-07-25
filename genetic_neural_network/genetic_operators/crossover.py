@@ -39,7 +39,7 @@ def generate_child_by_two_points(mother_tensor, father_tensor):
             [], minval=indice_1+1, maxval=tamanho_tensor, dtype=tf.int32)
         child = tf.concat([mother_flat[0:indice_1], father_flat[indice_1:indice_2],
                            mother_flat[indice_2:tamanho_tensor]], axis=0)
-        child = tf.reshape(filho, tf.shape(pai))
+        child = tf.reshape(child, tf.shape(father_flat))
 
     return child
 

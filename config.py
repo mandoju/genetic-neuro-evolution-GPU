@@ -7,7 +7,7 @@ def getLayer():
         activation = tf.math.tanh
     else:
         activation = tf.math.sigmoid
-    if (sys.argv[3] == 'feed_foward_6'):
+    if (sys.argv[3] == 'feed_foward_3'):
         return [
             GeneticLayer((784, 500), 500, 'wd', activation, 'd1'),
             GeneticLayer((500, 500), 500, 'wd', activation, 'd2'),
@@ -15,7 +15,7 @@ def getLayer():
             GeneticLayer((500, 500), 500, 'wd', activation, 'd4'),
 
             GeneticLayer((500, 10), 10, 'wd', None, 'out')]
-    elif (sys.argv[3] == 'feed_foward_3'):
+    elif (sys.argv[3] == 'feed_foward_6'):
         return [
             GeneticLayer((784, 500), 500, 'wd', activation, 'd1'),
             GeneticLayer((500, 500), 500, 'wd', activation, 'd2'),

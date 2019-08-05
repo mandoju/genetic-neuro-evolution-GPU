@@ -9,6 +9,8 @@ from config import getLayer, getMnistFlag
 from packs import get_biases, get_weight_convolution, get_weight_dense, get_biases_dense
 import traceback
 import sys
+import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
 # if(len(sys.argv) > 2):
 #    weights_convulation_input = get_weight_dense(int(sys.argv[2]),0)
@@ -25,7 +27,7 @@ geneticSettings = {
     'test_x': test_x,
     'test_y': test_y,
     'populationSize': int(sys.argv[1]),
-    'epochs': 100,
+    'epochs': 1,
     'inner_loop': 1000,
     # 'weights_convulation': weights_convulation_input,
     # 'biases': biases_input,

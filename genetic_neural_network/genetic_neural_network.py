@@ -215,6 +215,7 @@ class GeneticNeuralNetwork:
                 [self.neural_networks.validation_accuracies, fitness_validation], feed_dict={
                     self.neural_networks.X: test_x, self.neural_networks.Y: test_y})
 
+            print("tempo" + str(time.time() - start_time))
             print("acuracia:" + str(accuracies))
             validation_acuracias.append(accuracies)
             print("fitness:" + str(cost))
